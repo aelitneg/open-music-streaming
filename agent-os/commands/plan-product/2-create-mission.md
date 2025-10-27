@@ -63,7 +63,7 @@ Once you've created mission.md, output the following message:
 
 Review it to ensure it matches your vision and strategic goals for this product.
 
-Next step: Run the command, `3-create-roadmap.md`
+NEXT STEP 👉 Run the command, `3-create-roadmap.md`
 ```
 
 ## User Standards & Preferences Compliance

@@ -31,7 +31,7 @@ Once you've created tech-stack.md, output the following message:
 
 Review it to ensure all of the tech stack details are correct for this product.
 
-You're ready to start planning a feature spec! You can do so by running the command, `1-new-spec.md`.
+You're ready to start planning a feature spec! You can do so by running `shape-spec.md` or `write-spec.md`.
 ```
 
 ## User Standards & Preferences Compliance

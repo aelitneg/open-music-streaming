@@ -38,7 +38,7 @@ Once you've gathered all of the necessary information, output the following mess
 ```
 I have all the info I need to help you plan this product.
 
-Next step: Run the command, `2-create-mission.md`
+NEXT STEP 👉 Run the command, `2-create-mission.md`
 ```
 
 ## User Standards & Preferences Compliance

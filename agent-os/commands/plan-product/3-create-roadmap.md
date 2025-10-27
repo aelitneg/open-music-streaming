@@ -59,7 +59,7 @@ Once you've created roadmap.md, output the following message:
 
 Review it to ensure it aligns with how you see this product roadmap going forward.
 
-Next step: Run the command, `4-create-tech-stack.md`
+NEXT STEP 👉 Run the command, `4-create-tech-stack.md`
 ```
 
 ## User Standards & Preferences Compliance

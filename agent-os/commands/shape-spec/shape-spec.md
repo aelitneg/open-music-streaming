@@ -1,3 +1,98 @@
+You are helping me shape and plan the scope for a new feature.  The following MULTI-PHASE process is aimed at documenting our key decisions regarding scope, design and architecture approach.
+
+Carefully read and execute the instructions in the following files IN SEQUENCE, following their numbered file names.  Only proceed to the next numbered instruction file once the previous numbered instruction has been executed.
+
+Instructions to follow in sequence:
+
+# PHASE 1: Initialize Spec
+
+The FIRST STEP is to initialize the spec by following these instructions:
+
+# Spec Initialization
+
+## Core Responsibilities
+
+1. **Get the description of the feature:** Receive it from the user or check the product roadmap
+2. **Initialize Spec Structure**: Create the spec folder with date prefix
+3. **Save Raw Idea**: Document the user's exact description without modification
+4. **Create Create Implementation & Verification Folders**: Setup folder structure for tracking implementation of this spec.
+5. **Prepare for Requirements**: Set up structure for next phase
+
+## Workflow
+
+### Step 1: Get the description of the feature
+
+IF you were given a description of the feature, then use that to initiate a new spec.
+
+OTHERWISE follow these steps to get the description:
+
+1. Check `@agent-os/product/roadmap.md` to find the next feature in the roadmap.
+2. OUTPUT the following to user and WAIT for user's response:
+
+```
+Which feature would you like to initiate a new spec for?
+
+- The roadmap shows [feature description] is next. Go with that?
+- Or provide a description of a feature you'd like to initiate a spec for.
+```
+
+**If you have not yet received a description from the user, WAIT until user responds.**
+
+### Step 2: Initialize Spec Structure
+
+Determine a kebab-case spec name from the user's description, then create the spec folder:
+
+```bash
+# Get today's date in YYYY-MM-DD format
+TODAY=$(date +%Y-%m-%d)
+
+# Determine kebab-case spec name from user's description
+SPEC_NAME="[kebab-case-name]"
+
+# Create dated folder name
+DATED_SPEC_NAME="${TODAY}-${SPEC_NAME}"
+
+# Store this path for output
+SPEC_PATH="agent-os/specs/$DATED_SPEC_NAME"
+
+# Create folder structure following architecture
+mkdir -p $SPEC_PATH/planning
+mkdir -p $SPEC_PATH/planning/visuals
+
+echo "Created spec folder: $SPEC_PATH"
+```
+
+### Step 3: Create Implementation Folder
+
+Create 2 folders:
+- `$SPEC_PATH/implementation/`
+
+Leave this folder empty, for now. Later, this folder will be populated with reports documented by implementation agents.
+
+### Step 4: Output Confirmation
+
+Return or output the following:
+
+```
+Spec folder initialized: `[spec-path]`
+
+Structure created:
+- planning/ - For requirements and specifications
+- planning/visuals/ - For mockups and screenshots
+- implementation/ - For implementation documentation
+
+Ready for requirements research phase.
+```
+
+## Important Constraints
+
+- Always use dated folder names (YYYY-MM-DD-spec-name)
+- Pass the exact spec path back to the orchestrator
+- Follow folder structure exactly
+- Implementation folder should be empty, for now
+
+# PHASE 2: Shape Spec
+
 Now that you've initialized the folder for this new spec, proceed with the research phase.
 
 Follow these instructions for researching this spec's requirements:
@@ -11,7 +106,7 @@ Follow these instructions for researching this spec's requirements:
 3. **Ask Clarifying Questions**: Generate targeted questions WITH visual asset request AND reusability check
 4. **Process Answers**: Analyze responses and any provided visuals
 5. **Ask Follow-ups**: Based on answers and visual analysis if needed
-6. **Save Requirements**: Document all requirements comprehensively
+6. **Save Requirements**: Document the requirements you've gathered to a single file named: `[spec-path]/planning/requirements.md`
 
 ## Workflow
 
@@ -48,7 +143,7 @@ This context will help you:
 
 ### Step 3: Generate First Round of Questions WITH Visual Request AND Reusability Check
 
-Based on the initial idea, generate 6-9 targeted, NUMBERED questions that explore requirements while suggesting reasonable defaults.
+Based on the initial idea, generate 4-8 targeted, NUMBERED questions that explore requirements while suggesting reasonable defaults.
 
 **CRITICAL: Always include the visual asset request AND reusability question at the END of your questions.**
 
@@ -153,7 +248,9 @@ Please provide these additional details.
 
 ### Step 6: Save Complete Requirements
 
-After all questions are answered, write ALL gathered information to `[spec-path]/planning/requirements.md`:
+After all questions are answered, record ALL gathered information to ONE FILE at this location with this name: `[spec-path]/planning/requirements.md`
+
+Use the following structure and do not deviate from this structure when writing your gathered information to `requirements.md`.  Include ONLY the items specified in the following structure:
 
 ```markdown
 # Spec Requirements: [Spec Name]
@@ -213,11 +310,6 @@ No visual assets provided.
 - [User actions enabled]
 - [Data to be managed]
 
-### Non-Functional Requirements
-- [Performance needs if mentioned]
-- [Security requirements if mentioned]
-- [Accessibility needs if mentioned]
-
 ### Reusability Opportunities
 - [Components that might exist already based on user's input]
 - [Backend patterns to investigate]
@@ -258,14 +350,14 @@ Ready for specification creation.
 ## Important Constraints
 
 - **MANDATORY**: Always run bash command to check visuals folder after receiving user answers
-- Visual check is based on actual files found via bash, NOT user statements
+- DO NOT write technical specifications for development. Just record your findings from information gathering to this single file: `[spec-path]/planning/requirements.md`.
+- Visual check is based on actual file(s) found via bash, NOT user statements
 - Check filenames for low-fidelity indicators and clarify design intent if found
 - Ask about existing similar features to promote code reuse
 - Keep follow-ups minimal (1-3 questions max)
 - Save user's exact answers, not interpretations
 - Document all visual findings including fidelity level
 - Document paths to similar features for spec-writer to reference
-- Create comprehensive requirements summary
 - OUTPUT questions and STOP to wait for orchestrator to relay responses
 
 
@@ -281,13 +373,15 @@ Next step: Run the command, `1-create-spec.md`.
 
 After all steps complete, inform the user:
 
-"Spec initialized successfully!
+```
+Spec initialized successfully!
 
 ✅ Spec folder created: `[spec-path]`
 ✅ Requirements gathered
 ✅ Visual assets: [Found X files / No files provided]
 
-👉 Run `/create-spec` to generate the detailed specification and task breakdown."
+👉 Run `/write-spec` to create the spec.md document.
+```
 
 ## User Standards & Preferences Compliance
 
