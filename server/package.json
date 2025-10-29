@@ -1,0 +1,38 @@
+{
+  "name": "open-music-streaming-server",
+  "version": "0.1.0",
+  "description": "A decentralised music streaming platform.",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/aelitneg/open-music-streaming"
+  },
+  "keywords": [
+    "atprotocol",
+    "decentralized",
+    "music",
+    "streaming"
+  ],
+  "author": {
+    "name": "Andrew Gentile",
+    "email": "andrew@agentile.dev",
+    "url": "https://aelitneg.com"
+  },
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-terminator": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3"
+  }
+}
