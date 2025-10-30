@@ -6,5 +6,7 @@
 !package-lock.json
 !tsconfig.json
 !src/**
+!prisma/**
+!prisma.config.ts
 !Dockerfile
 

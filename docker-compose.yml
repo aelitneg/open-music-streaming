@@ -26,6 +26,8 @@ services:
       target: builder
     container_name: server
     command: npm run dev
+    environment: 
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/open_music_streaming
     ports:
       - "3000:3000"
     volumes:

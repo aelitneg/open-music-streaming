@@ -8,8 +8,15 @@ export function createRouter(ctx: AppContext): RequestListener {
 
   router.get(
     '/healthcheck',
-    handler((req, res) => {
-      return res.status(200).send('OK');
+    handler(async (req, res) => {
+      let db = false;
+
+      try {
+        db = Boolean(await ctx.db.$queryRaw`SELECT 1`);
+        return res.status(200).json({ status: 'ok', db });
+      } catch (err) {
+        return res.status(503).json({ status: 'degraded', db });
+      }
     }),
   );
 
