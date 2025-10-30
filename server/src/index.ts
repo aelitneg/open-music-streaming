@@ -1,8 +1,8 @@
 import { once } from 'node:events';
-import { run } from './lib/process';
-import { createAppContext } from './context';
-import { createRouter } from './routes';
-import { startServer } from './lib/http';
+import { run } from '@/lib/process';
+import { createAppContext } from '@/context';
+import { createRouter } from '@/routes';
+import { startServer } from '@/lib/http';
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 

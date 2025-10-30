@@ -1,7 +1,7 @@
 import { RequestListener } from 'node:http';
 import express from 'express';
-import type { AppContext } from '../context';
-import { handler } from '../lib/http';
+import type { AppContext } from '@/context';
+import { handler } from '@/lib/http';
 
 export function createRouter(ctx: AppContext): RequestListener {
   const router = express();

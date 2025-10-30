@@ -13,6 +13,10 @@
     // Module Resolution
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
 
     // Strict Type Checking
     "strict": true,
