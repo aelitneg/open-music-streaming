@@ -1,0 +1,15 @@
+# Exclude everything by default to minimize build context
+**
+
+# Allow only what's needed for the build
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.ts
+!next-env.d.ts
+!postcss.config.mjs
+!app/**
+!components/**
+!lib/**
+!public/**
+!Dockerfile
