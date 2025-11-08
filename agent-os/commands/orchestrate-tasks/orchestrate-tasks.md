@@ -35,10 +35,9 @@ task_groups:
   # Repeat for each task group found in tasks.md
 ```
 
-
 ### NEXT: Ask user to assign standards to each task group
 
-Next we must determine which standards should guide the implementation of each task group.  Ask the user to provide this info using the following request to user and WAIT for user's response:
+Next we must determine which standards should guide the implementation of each task group. Ask the user to provide this info using the following request to user and WAIT for user's response:
 
 ```
 Please specify the standard(s) that should be used to guide the implementation of each task group:
@@ -56,7 +55,7 @@ For each task group number, you can specify any combination of the following:
 "none" to include no standards for this task group.
 ```
 
-Using the user's responses, update `orchestration.yml` to specify those standards for each task group.  `orchestration.yml` should end up having AT LEAST the following information added to it:
+Using the user's responses, update `orchestration.yml` to specify those standards for each task group. `orchestration.yml` should end up having AT LEAST the following information added to it:
 
 ```yaml
 task_groups:
@@ -95,7 +94,6 @@ task_groups:
 
 Note: If the `use_claude_code_subagents` flag is enabled, the final `orchestration.yml` would include BOTH `claude_code_subagent` assignments AND `standards` for each task group.
 
-
 ### NEXT: Generate prompts
 
 Now we must generate an ordered series of prompt texts, which will be used to direct the implementation of each task group listed in `orchestration.yml`.
@@ -131,8 +129,8 @@ Use the following logic to compile a list of file references to standards that s
 2. Check the list of `standards` specified for this task group in `orchestration.yml`
 3. Compile the list of file references to those standards, one file reference per line, using this logic for determining which files to include:
    a. If the value for `standards` is simply `all`, then include every single file, folder, sub-folder and files within sub-folders in your list of files.
-   b. If the item under standards ends with "*" then it means that all files within this folder or sub-folder should be included. For example, `frontend/*` means include all files and sub-folders and their files located inside of `agent-os/standards/frontend/`.
-   c. If a file ends in `.md` then it means this is one specific file you must include in your list of files. For example `backend/api.md` means you must include the file located at `agent-os/standards/backend/api.md`.
+   b. If the item under standards ends with "_" then it means that all files within this folder or sub-folder should be included. For example, `frontend/_`means include all files and sub-folders and their files located inside of`agent-os/standards/frontend/`.
+c. If a file ends in `.md`then it means this is one specific file you must include in your list of files. For example`backend/api.md`means you must include the file located at`agent-os/standards/backend/api.md`.
    d. De-duplicate files in your list of file references.
 
 ##### Output Format
@@ -150,7 +148,6 @@ The compiled list of standards should look something like this, where each file 
 @agent-os/standards/frontend/responsive.md
 ```
 
-
 #### Prompt file content template:
 
 ```markdown
@@ -165,6 +162,7 @@ We're continuing our implementation of [spec-title] by implementing task group n
 Read @agent-os/specs/[this-spec]/spec.md to understand the context for this spec and where the current task fits into it.
 
 Also read these further context and reference:
+
 - @agent-os/specs/[this-spec/]/planning/requirements.md
 - @agent-os/specs/[this-spec/]/planning/visuals
 
@@ -180,13 +178,14 @@ Implement all tasks assigned to you and ONLY those task(s) that have been assign
 4. Update `agent-os/specs/[this-spec]/tasks.md` to update the tasks you've implemented to mark that as done by updating their checkbox to checked state: `- [x]`
 
 ## Guide your implementation using:
+
 - **The existing patterns** that you've found and analyzed in the codebase.
 - **User Standards & Preferences** which are defined below.
 
 ## Self-verify and test your work by:
+
 - Running ONLY the tests you've written (if any) and ensuring those tests pass.
 - IF your task involves user-facing UI, and IF you have access to browser testing tools, open a browser and use the feature you've implemented as if you are a user to ensure a user can use the feature in the intended way.
-
 
 ## User Standards & Preferences Compliance
 

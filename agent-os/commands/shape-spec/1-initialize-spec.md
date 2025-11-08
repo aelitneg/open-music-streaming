@@ -57,6 +57,7 @@ echo "Created spec folder: $SPEC_PATH"
 ### Step 3: Create Implementation Folder
 
 Create 2 folders:
+
 - `$SPEC_PATH/implementation/`
 
 Leave this folder empty, for now. Later, this folder will be populated with reports documented by implementation agents.
@@ -82,7 +83,6 @@ Ready for requirements research phase.
 - Pass the exact spec path back to the orchestrator
 - Follow folder structure exactly
 - Implementation folder should be empty, for now
-
 
 ## Display confirmation and next step
 

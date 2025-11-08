@@ -18,6 +18,7 @@ Do not include any tasks for initializing a new codebase or bootstrapping a new 
 4. **Create the Roadmap** - Use the structure below as your template. Replace all bracketed placeholders (e.g., `[FEATURE_NAME]`, `[DESCRIPTION]`, `[EFFORT]`) with real content that you create based on the mission.
 
 #### Roadmap Structure:
+
 ```markdown
 # Product Roadmap
 
@@ -31,12 +32,14 @@ Do not include any tasks for initializing a new codebase or bootstrapping a new 
 8. [ ] [FEATURE_NAME] — [1-2 SENTENCE DESCRIPTION OF COMPLETE, TESTABLE FEATURE] `[EFFORT]`
 
 > Notes
+>
 > - Include 4–12 items total
 > - Order items by technical dependencies and product architecture
 > - Each item should represent an end-to-end (frontend + backend) functional and testable feature
 ```
 
 Effort scale:
+
 - `XS`: 1 day
 - `S`: 2-3 days
 - `M`: 1 week
@@ -48,7 +51,6 @@ Effort scale:
 - **Make roadmap actionable** - include effort estimates and dependencies
 - **Priorities guided by mission** - When deciding on order, aim for the most direct path to achieving the mission as documented in mission.md
 - **Ensure phases are achievable** - start with MVP, build incrementally
-
 
 ## Display confirmation and next step
 

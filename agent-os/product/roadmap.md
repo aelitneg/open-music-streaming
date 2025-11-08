@@ -25,6 +25,7 @@
 12. [ ] **Mobile & Offline Support** — Develop mobile-responsive design, Progressive Web App capabilities, and offline music caching for enhanced user experience. `XL`
 
 > Notes
+>
 > - Include 4–12 items total
 > - Order items by technical dependencies and product architecture
 > - Each item should represent an end-to-end (frontend + backend) functional and testable feature

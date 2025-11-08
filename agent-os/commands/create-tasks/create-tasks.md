@@ -1,12 +1,13 @@
 I want you to create a tasks breakdown from a given spec and requirements for a new feature using the following MULTI-PHASE process and instructions.
 
-Carefully read and execute the instructions in the following files IN SEQUENCE, following their numbered file names.  Only proceed to the next numbered instruction file once the previous numbered instruction has been executed.
+Carefully read and execute the instructions in the following files IN SEQUENCE, following their numbered file names. Only proceed to the next numbered instruction file once the previous numbered instruction has been executed.
 
 Instructions to follow in sequence:
 
 # PHASE 1: Get Spec Requirements
 
 The FIRST STEP is to make sure you have ONE OR BOTH of these files to inform your tasks breakdown:
+
 - `agent-os/specs/[this-spec]/spec.md`
 - `agent-os/specs/[this-spec]/planning/requirements.md`
 
@@ -14,7 +15,7 @@ IF you don't have ONE OR BOTH of those files in your current conversation contex
 
 "I'll need a spec.md or requirements.md (or both) in order to build a tasks list.
 
-Please direct me to where I can find those.  If you haven't created them yet, you can run /shape-spec or /write-spec."
+Please direct me to where I can find those. If you haven't created them yet, you can run /shape-spec or /write-spec."
 
 # PHASE 2: Create Tasks List
 
@@ -34,11 +35,11 @@ Now that you have the spec.md AND/OR requirements.md, please break those down in
 ### Step 1: Analyze Spec & Requirements
 
 Read each of these files (if available) and analyze them to understand the requirements for this feature implementation:
+
 - `agent-os/specs/[this-spec]/spec.md`
 - `agent-os/specs/[this-spec]/planning/requirements.md`
 
 Use your learnings to inform the tasks list and groupings you will create in the next step.
-
 
 ### Step 2: Create Tasks Breakdown
 
@@ -50,6 +51,7 @@ Generate `agent-os/specs/[current-spec]/tasks.md`.
 # Task Breakdown: [Feature Name]
 
 ## Overview
+
 Total Tasks: [count]
 
 ## Task List
@@ -57,6 +59,7 @@ Total Tasks: [count]
 ### Database Layer
 
 #### Task Group 1: Data Models and Migrations
+
 **Dependencies:** None
 
 - [ ] 1.0 Complete database layer
@@ -80,6 +83,7 @@ Total Tasks: [count]
     - Do NOT run the entire test suite at this stage
 
 **Acceptance Criteria:**
+
 - The 2-8 tests written in 1.1 pass
 - Models pass validation tests
 - Migrations run successfully
@@ -88,6 +92,7 @@ Total Tasks: [count]
 ### API Layer
 
 #### Task Group 2: API Endpoints
+
 **Dependencies:** Task Group 1
 
 - [ ] 2.0 Complete API layer
@@ -111,6 +116,7 @@ Total Tasks: [count]
     - Do NOT run the entire test suite at this stage
 
 **Acceptance Criteria:**
+
 - The 2-8 tests written in 2.1 pass
 - All CRUD operations work
 - Proper authorization enforced
@@ -119,6 +125,7 @@ Total Tasks: [count]
 ### Frontend Components
 
 #### Task Group 3: UI Design
+
 **Dependencies:** Task Group 2
 
 - [ ] 3.0 Complete UI components
@@ -155,6 +162,7 @@ Total Tasks: [count]
     - Do NOT run the entire test suite at this stage
 
 **Acceptance Criteria:**
+
 - The 2-8 tests written in 3.1 pass
 - Components render correctly
 - Forms validate and submit
@@ -163,6 +171,7 @@ Total Tasks: [count]
 ### Testing
 
 #### Task Group 4: Test Review & Gap Analysis
+
 **Dependencies:** Task Groups 1-3
 
 - [ ] 4.0 Review existing tests and fill critical gaps only
@@ -188,6 +197,7 @@ Total Tasks: [count]
     - Verify critical workflows pass
 
 **Acceptance Criteria:**
+
 - All feature-specific tests pass (approximately 16-34 tests total)
 - Critical user workflows for this feature are covered
 - No more than 10 additional tests added when filling in testing gaps
@@ -196,6 +206,7 @@ Total Tasks: [count]
 ## Execution Order
 
 Recommended implementation sequence:
+
 1. Database Layer (Task Group 1)
 2. API Layer (Task Group 2)
 3. Frontend Design (Task Group 3)
@@ -203,6 +214,7 @@ Recommended implementation sequence:
 ```
 
 **Note**: Adapt this structure based on the actual feature requirements. Some features may need:
+
 - Different task groups (e.g., email notifications, payment processing, data migration)
 - Different execution order based on dependencies
 - More or fewer sub-tasks per group
@@ -219,7 +231,6 @@ Recommended implementation sequence:
 - **Use a focused test-driven approach** where each task group starts with writing 2-8 tests (x.1 sub-task) and ends with running ONLY those tests (final sub-task)
 - **Include acceptance criteria** for each task group
 - **Reference visual assets** if visuals are available
-
 
 ## Display confirmation and next step
 

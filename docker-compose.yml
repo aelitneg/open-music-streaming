@@ -7,11 +7,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/18/docker
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d open_music_streaming"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d open_music_streaming']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -26,10 +26,13 @@ services:
       target: builder
     container_name: server
     command: npm run dev
-    environment: 
+    environment:
+      - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/open_music_streaming
+      - CLIENT_URL=http://localhost:8080
+      - COOKIE_SECRET=00000000000000000000000000000000
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - ./server/src:/app/src
     depends_on:
@@ -62,8 +65,9 @@ services:
     command: npm run dev
     environment:
       - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:3000
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - ./client/app:/app/app
       - ./client/components:/app/components

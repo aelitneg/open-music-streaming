@@ -7,7 +7,9 @@ export default function AuthLayout({
   return (
     <div className="h-screen">
       <Header showAuth={false} />
-      <div className="my-32">{children}</div>
+      <div className="flex flex-col items-center justify-center mt-32">
+        {children}
+      </div>
     </div>
   );
 }

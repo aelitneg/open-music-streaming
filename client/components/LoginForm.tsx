@@ -1,6 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,8 +27,33 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log('Login data:', data);
-    // TODO: Implement login logic
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        },
+      );
+
+      if (!response.ok) {
+        const error = await response
+          .json()
+          .catch(() => ({ message: 'Unknown error' }));
+        throw new Error(error.message);
+      }
+
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        `Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+    }
   };
 
   return (

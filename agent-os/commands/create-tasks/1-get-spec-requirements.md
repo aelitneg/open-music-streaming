@@ -1,4 +1,5 @@
 The FIRST STEP is to make sure you have ONE OR BOTH of these files to inform your tasks breakdown:
+
 - `agent-os/specs/[this-spec]/spec.md`
 - `agent-os/specs/[this-spec]/planning/requirements.md`
 
@@ -6,7 +7,7 @@ IF you don't have ONE OR BOTH of those files in your current conversation contex
 
 "I'll need a spec.md or requirements.md (or both) in order to build a tasks list.
 
-Please direct me to where I can find those.  If you haven't created them yet, you can run /shape-spec or /write-spec."
+Please direct me to where I can find those. If you haven't created them yet, you can run /shape-spec or /write-spec."
 
 ## Display confirmation and next step
 
