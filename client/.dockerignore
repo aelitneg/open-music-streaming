@@ -11,5 +11,7 @@
 !app/**
 !components/**
 !lib/**
+!providers/**
+!hooks/**
 !public/**
 !Dockerfile

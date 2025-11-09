@@ -1,12 +1,14 @@
 'use client';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
+import { useSession } from '@/hooks/useSession';
 
-export default function OAuthCallback() {
+function OAuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { dispatch } = useSession();
 
   useEffect(() => {
     (async () => {
@@ -18,6 +20,7 @@ export default function OAuthCallback() {
             headers: {
               'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({
               state: searchParams.get('state'),
               iss: searchParams.get('iss'),
@@ -33,6 +36,9 @@ export default function OAuthCallback() {
           throw new Error(error.message);
         }
 
+        const session = await response.json();
+        dispatch({ type: 'SET_SESSION', payload: session });
+
         router.push('/');
       } catch (error) {
         console.error(error);
@@ -41,12 +47,27 @@ export default function OAuthCallback() {
         );
       }
     })();
-  }, [router, searchParams]);
+  }, [router, searchParams, dispatch]);
 
   return (
     <div className="flex gap-2 text-4xl mb-8 font-bold">
       <h2>Logging in...</h2>
       <Spinner className="size-10" />
     </div>
+  );
+}
+
+export default function OAuthCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex gap-2 text-4xl mb-8 font-bold">
+          <h2>Loading...</h2>
+          <Spinner className="size-10" />
+        </div>
+      }
+    >
+      <OAuthCallbackContent />
+    </Suspense>
   );
 }

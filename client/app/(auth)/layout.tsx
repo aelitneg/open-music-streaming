@@ -6,7 +6,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="h-screen">
-      <Header showAuth={false} />
+      <Header />
       <div className="flex flex-col items-center justify-center mt-32">
         {children}
       </div>

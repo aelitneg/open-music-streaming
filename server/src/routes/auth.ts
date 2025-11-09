@@ -60,10 +60,46 @@ export function createAuthRouter(ctx: AppContext): RequestListener {
         clientSession.did = session.did;
         await clientSession.save();
 
-        return res.status(200).json({ message: 'login success' });
+        return res.status(200).json({
+          authenticated: true,
+          did: session.did,
+        });
       } catch (error) {
         console.error(error, 'oauth callback failed');
       }
+    }),
+  );
+
+  router.get(
+    '/session',
+    handler(async (req, res) => {
+      const session = await getIronSession<Session>(req, res, {
+        cookieName: 'sid',
+        password: COOKIE_SECRET,
+      });
+
+      if (!session.did) {
+        return res.status(401).json({ authenticated: false });
+      }
+
+      return res.json({
+        authenticated: true,
+        did: session.did,
+      });
+    }),
+  );
+
+  router.post(
+    '/logout',
+    handler(async (req, res) => {
+      const session = await getIronSession<Session>(req, res, {
+        cookieName: 'sid',
+        password: COOKIE_SECRET,
+      });
+
+      session.destroy();
+
+      return res.json({ message: 'logout success' });
     }),
   );
 
