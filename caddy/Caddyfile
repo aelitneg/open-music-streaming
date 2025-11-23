@@ -1,0 +1,11 @@
+:80 {
+    @plc host plc.aelitneg.xyz
+    handle @plc {
+        reverse_proxy plc:2582
+    }
+
+    @pds host pds.aelitneg.xyz
+    handle @pds {
+        reverse_proxy pds:3000
+    }
+}

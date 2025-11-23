@@ -1,0 +1,71 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./caddy:/etc/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      cloudflared:
+        condition: service_started
+
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres 
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - plc_db:/var/lib/postgresql/18/docker
+      - ./postgres/init:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: 'pg_isready -U postgres'
+      interval: 500ms
+      timeout: 10s
+      retries: 20
+
+  plc:
+    image: did-method-plc
+    environment:
+      - PORT=2582
+      - DATABASE_URL=postgres://postgres:secret@db/plc
+      - DB_CREDS_JSON={"username":"postgres", "password":"secret", "host":"db", "port":"5432", "database":"plc"}
+      - DB_MIGRATE_CREDS_JSON={"username":"postgres", "password":"secret", "host":"db", "port":"5432", "database":"plc"}
+      - ENABLE_MIGRATIONS=true
+      - DEBUG_MODE=1
+      - LOG_ENABLED="true"
+      - LOG_LEVEL=debug
+      - LOG_DESTINATION=1
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: 'wget --spider --quiet http://localhost:2582/_health || exit 1'
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  pds:
+    image: ghcr.io/bluesky-social/pds:0.4
+    env_file: pds.env 
+    volumes:
+      - ./pds:/pds
+    depends_on:
+      plc:
+        condition: service_healthy
+
+volumes:
+  caddy_data:
+  caddy_config:
+  plc_db:
