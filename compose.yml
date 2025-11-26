@@ -8,7 +8,7 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
       - ./caddy:/etc/caddy
       - caddy_data:/data
@@ -21,10 +21,10 @@ services:
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=postgres 
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - plc_db:/var/lib/postgresql/18/docker
       - ./postgres/init:/docker-entrypoint-initdb.d/
@@ -57,8 +57,10 @@ services:
       start_period: 30s
 
   pds:
-    image: ghcr.io/bluesky-social/pds:0.4
-    env_file: pds.env 
+    build:
+      context: ./pds
+      dockerfile: Dockerfile
+    env_file: pds.env
     volumes:
       - ./pds:/pds
     depends_on:

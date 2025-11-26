@@ -8,4 +8,14 @@
     handle @pds {
         reverse_proxy pds:3000
     }
+
+    @api host api.aelitneg.xyz
+    handle @api {
+        reverse_proxy host.docker.internal:3000
+    }
+
+    @app host app.aelitneg.xyz
+    handle @app {
+        reverse_proxy host.docker.internal:8080
+    }
 }

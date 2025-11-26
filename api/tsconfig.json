@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2023",
+    "lib": ["es2022"],
+    "types": ["node"],
+
+    // Output
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+
+    // Module Resolution
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    // Strict Type Checking
+    "strict": true,
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Build
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
