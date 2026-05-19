@@ -1,0 +1,11 @@
+# Docs
+docs/drafts/
+
+# Local environment
+.env
+
+# Cloned external repos
+did-method-plc/
+
+# Claude Code
+.claude/settings.local.json

@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/18/docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/18/docker
+      - ./postgres/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  plc:
+    image: plc:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_CREDS_JSON: '{"username":"${POSTGRES_USER}","password":"${POSTGRES_PASSWORD}","host":"postgres","port":"5432","database":"plc"}'
+      DB_MIGRATE_CREDS_JSON: '{"username":"${POSTGRES_USER}","password":"${POSTGRES_PASSWORD}","host":"postgres","port":"5432","database":"plc"}'
+      ENABLE_MIGRATIONS: "true"
+      NODE_ENV: production
+      LOG_ENABLED: "true"
+      LOG_LEVEL: info
+      LOG_DESTINATION: 1
+    ports:
+      - "2582:3000"
+
+  pds:
+    image: ghcr.io/bluesky-social/pds:0.4
+    depends_on:
+      plc:
+        condition: service_started
+    environment:
+      PDS_DEV_MODE: true
+      PDS_JWT_SECRET: ${PDS_JWT_SECRET}
+      PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX: ${PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX}
+      PDS_PORT: 3000
+      PDS_HOSTNAME: localhost
+      PDS_SERVICE_HANDLE_DOMAINS: ${PDS_SERVICE_HANDLE_DOMAINS}
+      PDS_DID_PLC_URL: http://plc:3000
+      PDS_ADMIN_PASSWORD: ${PDS_ADMIN_PASSWORD}
+      PDS_BLOBSTORE_DISK_LOCATION: /pds/blocks
+      LOG_ENABLED: "true"
+      LOG_LEVEL: trace
+      DEBUG_MODE: 1
+    volumes:
+      - pds_data:/pds
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  pds_data:
