@@ -8,30 +8,51 @@ Open Music Streaming is a decentralized, federated music streaming platform. Eac
 
 ## Status
 
-Early stage. The AT Protocol development stack is running via Docker Compose. No application source code or build tooling exists yet. When adding the first code, establish:
+Early stage. The AT Protocol development stack is running via Docker Compose. The backend API server is scaffolded (`backend/`) but no domain features exist yet.
 
-- A package manager and build system appropriate to the chosen language(s)
-- Linting and formatting configuration
-- A test runner
-- Update this file with the relevant commands
+## Package Manager
+
+**pnpm** with workspaces. Always use `pnpm` (not npm or yarn).
+
+| Command        | Description                        |
+| -------------- | ---------------------------------- |
+| `pnpm install` | Install all workspace dependencies |
+| `pnpm lint`    | Run ESLint across all packages     |
+| `pnpm format`  | Run Prettier across all packages   |
+
+## Backend (`backend/`)
+
+Node.js + TypeScript + Fastify REST API. Listens on port `4000`.
+
+| Command                                        | Description                                  |
+| ---------------------------------------------- | -------------------------------------------- |
+| `pnpm --filter @open-music/backend dev`        | Start dev server with hot reload (tsx watch) |
+| `pnpm --filter @open-music/backend build`      | Compile TypeScript to `dist/`                |
+| `pnpm --filter @open-music/backend start`      | Run compiled output                          |
+| `pnpm --filter @open-music/backend test`       | Run tests (vitest)                           |
+| `pnpm --filter @open-music/backend test:watch` | Run tests in watch mode                      |
+
+Application entry: `backend/src/server.ts`  
+App factory (for testing): `backend/src/app.ts`  
+Routes: `backend/src/routes/`
 
 ## Dev Stack
 
 The local development environment is controlled with `make`:
 
-| Command | Description |
-|---|---|
-| `make up` | Build PLC image and start all services |
-| `make down` | Stop all services |
+| Command               | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| `make up`             | Build PLC image and start all services         |
+| `make down`           | Stop all services                              |
 | `make create-account` | Create an AT Protocol account on the local PDS |
 
 Services (defined in `docker-compose.yml`):
 
-| Service | Port | Notes |
-|---|---|---|
-| PostgreSQL | `5432` | Shared DB; init script creates `plc` and `app` databases |
-| PLC | `2582` | DID PLC directory, built from [did-method-plc](https://github.com/did-method-plc/did-method-plc) |
-| PDS | `3000` | Bluesky PDS in dev mode; handles use `.test.com` domain |
+| Service    | Port   | Notes                                                                                            |
+| ---------- | ------ | ------------------------------------------------------------------------------------------------ |
+| PostgreSQL | `5432` | Shared DB; init script creates `plc` and `app` databases                                         |
+| PLC        | `2582` | DID PLC directory, built from [did-method-plc](https://github.com/did-method-plc/did-method-plc) |
+| PDS        | `3000` | Bluesky PDS in dev mode; handles use `.test.com` domain                                          |
 
 Environment is configured via `.env` (see `.env.example`). The two secret variables (`PDS_JWT_SECRET`, `PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX`) are generated with `openssl rand -hex 32`.
 
