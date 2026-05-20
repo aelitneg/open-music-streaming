@@ -7,6 +7,8 @@ Music's future depends on a sustainable relationship between the people who crea
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) (with Compose)
+- [Node.js](https://nodejs.org/) (v20+)
+- [pnpm](https://pnpm.io/) (v10+)
 - `make`
 - `jq`
 
@@ -35,13 +37,18 @@ cp .env.example .env
 | PostgreSQL | Shared database                             | `5432`     |
 | PLC        | DID PLC directory (built from source)       | `2582`     |
 | PDS        | AT Protocol Personal Data Server (dev mode) | `3000`     |
+| Backend    | App View REST API                           | `4000`     |
 
 ### Commands
 
 | Command               | Description                                    |
 | --------------------- | ---------------------------------------------- |
-| `make up`             | Build the PLC image and start the stack        |
-| `make down`           | Stop the stack                                 |
+| `make stack-up`       | Build the PLC image and start the stack        |
+| `make stack-down`     | Stop the stack                                 |
+| `make backend-up`     | Start the backend API dev server (port 4000)   |
+| `make db-generate`    | Generate a SQL migration from schema changes   |
+| `make db-migrate`     | Apply pending migrations to the database       |
+| `make db-studio`      | Open Drizzle Studio (local DB GUI)             |
 | `make create-account` | Create an AT Protocol account on the local PDS |
 
 `create-account` accepts optional overrides:

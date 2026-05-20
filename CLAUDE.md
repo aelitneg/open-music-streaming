@@ -24,17 +24,22 @@ Early stage. The AT Protocol development stack is running via Docker Compose. Th
 
 Node.js + TypeScript + Fastify REST API. Listens on port `4000`.
 
-| Command                                        | Description                                  |
-| ---------------------------------------------- | -------------------------------------------- |
-| `pnpm --filter @open-music/backend dev`        | Start dev server with hot reload (tsx watch) |
-| `pnpm --filter @open-music/backend build`      | Compile TypeScript to `dist/`                |
-| `pnpm --filter @open-music/backend start`      | Run compiled output                          |
-| `pnpm --filter @open-music/backend test`       | Run tests (vitest)                           |
-| `pnpm --filter @open-music/backend test:watch` | Run tests in watch mode                      |
+Use `make backend-up` to start the dev server (injects `DATABASE_URL` from `.env`). For other tasks, use pnpm filter commands directly:
+
+| Command                                                 | Description                   |
+| ------------------------------------------------------- | ----------------------------- |
+| `pnpm --filter open-music-streaming-backend build`      | Compile TypeScript to `dist/` |
+| `pnpm --filter open-music-streaming-backend start`      | Run compiled output           |
+| `pnpm --filter open-music-streaming-backend test`       | Run tests (vitest)            |
+| `pnpm --filter open-music-streaming-backend test:watch` | Run tests in watch mode       |
 
 Application entry: `backend/src/server.ts`  
 App factory (for testing): `backend/src/app.ts`  
-Routes: `backend/src/routes/`
+Routes: `backend/src/routes/`  
+DB schema: `backend/src/db/schema.ts`  
+DB instance: `backend/src/db/index.ts`
+
+Migration files live in `backend/drizzle/` and are committed to git. `DATABASE_URL` is constructed from `POSTGRES_USER`/`POSTGRES_PASSWORD` in `.env` by the make targets.
 
 ## Dev Stack
 
@@ -42,8 +47,12 @@ The local development environment is controlled with `make`:
 
 | Command               | Description                                    |
 | --------------------- | ---------------------------------------------- |
-| `make up`             | Build PLC image and start all services         |
-| `make down`           | Stop all services                              |
+| `make stack-up`       | Build PLC image and start all services         |
+| `make stack-down`     | Stop all services                              |
+| `make backend-up`     | Start backend API dev server (port 4000)       |
+| `make db-generate`    | Generate SQL migration from schema diff        |
+| `make db-migrate`     | Apply pending migrations to the database       |
+| `make db-studio`      | Open Drizzle Studio (local DB GUI)             |
 | `make create-account` | Create an AT Protocol account on the local PDS |
 
 Services (defined in `docker-compose.yml`):

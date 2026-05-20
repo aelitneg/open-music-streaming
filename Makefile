@@ -7,7 +7,11 @@ EMAIL          ?= newuser@test.com
 PASSWORD       ?= secret
 ADMIN_PASSWORD ?= $(shell grep -E '^PDS_ADMIN_PASSWORD=' .env | tail -1 | cut -d= -f2-)
 
-.PHONY: plc-build up down create-account
+POSTGRES_USER     := $(shell grep -E '^POSTGRES_USER=' .env | tail -1 | cut -d= -f2-)
+POSTGRES_PASSWORD := $(shell grep -E '^POSTGRES_PASSWORD=' .env | tail -1 | cut -d= -f2-)
+DATABASE_URL      := postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/app
+
+.PHONY: plc-build stack-up stack-down create-account backend-up db-generate db-migrate db-studio
 
 $(PLC_DIR)/.git:
 	git clone $(PLC_REPO) $(PLC_DIR)
@@ -15,11 +19,23 @@ $(PLC_DIR)/.git:
 plc-build: $(PLC_DIR)/.git
 	docker build -t $(PLC_IMAGE) -f $(PLC_DIR)/packages/server/Dockerfile $(PLC_DIR)
 
-up: plc-build
+stack-up: plc-build
 	docker compose up
 
-down:
+stack-down:
 	docker compose down
+
+backend-up:
+	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend dev
+
+db-generate:
+	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:generate
+
+db-migrate:
+	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:migrate
+
+db-studio:
+	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:studio
 
 create-account:
 	@INVITE=$$(docker compose exec -T pds goat pds admin create-invites | tr -d '\r\n') && \
