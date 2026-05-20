@@ -18,15 +18,15 @@ Copy the example env file and fill in values:
 cp .env.example .env
 ```
 
-| Variable                                    | Description                                                  |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| `POSTGRES_USER`                             | Postgres superuser name                                      |
-| `POSTGRES_PASSWORD`                         | Postgres superuser password                                  |
-| `POSTGRES_DB`                               | Default Postgres database                                    |
-| `PDS_ADMIN_PASSWORD`                        | Password for the PDS admin account                                                     |
-| `PDS_SERVICE_HANDLE_DOMAINS`                | Allowed handle domains for new accounts (default: `.test.com`)                         |
-| `PDS_JWT_SECRET`                            | Random secret — generate with `openssl rand -hex 32`                                   |
-| `PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX` | Secp256k1 private key — generate with `openssl rand -hex 32`                           |
+| Variable                                    | Description                                                    |
+| ------------------------------------------- | -------------------------------------------------------------- |
+| `POSTGRES_USER`                             | Postgres superuser name                                        |
+| `POSTGRES_PASSWORD`                         | Postgres superuser password                                    |
+| `POSTGRES_DB`                               | Default Postgres database                                      |
+| `PDS_ADMIN_PASSWORD`                        | Password for the PDS admin account                             |
+| `PDS_SERVICE_HANDLE_DOMAINS`                | Allowed handle domains for new accounts (default: `.test.com`) |
+| `PDS_JWT_SECRET`                            | Random secret — generate with `openssl rand -hex 32`           |
+| `PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX` | Secp256k1 private key — generate with `openssl rand -hex 32`   |
 
 ### Stack
 
@@ -36,14 +36,13 @@ cp .env.example .env
 | PLC        | DID PLC directory (built from source)       | `2582`     |
 | PDS        | AT Protocol Personal Data Server (dev mode) | `3000`     |
 
-
 ### Commands
 
-| Command               | Description                                              |
-| --------------------- | -------------------------------------------------------- |
-| `make up`             | Build the PLC image and start the stack                  |
-| `make down`           | Stop the stack                                           |
-| `make create-account` | Create an AT Protocol account on the local PDS           |
+| Command               | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| `make up`             | Build the PLC image and start the stack        |
+| `make down`           | Stop the stack                                 |
+| `make create-account` | Create an AT Protocol account on the local PDS |
 
 `create-account` accepts optional overrides:
 

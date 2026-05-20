@@ -21,7 +21,7 @@ This limit only affects artists as they will need to be using a PDS capable of h
 
 ## Decision
 
-The decision was made to accept the 50 MB limit imposed by the PDS in exchange for not having to implement authorisation in a standardised way. This limit should be enough to satisfy high quality music files. 
+The decision was made to accept the 50 MB limit imposed by the PDS in exchange for not having to implement authorisation in a standardised way. This limit should be enough to satisfy high quality music files.
 
 ## Consequences
 
