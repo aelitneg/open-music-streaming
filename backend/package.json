@@ -14,8 +14,11 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@atproto/oauth-client-node": "^0.4.0",
+    "dotenv": "^17.4.2",
     "drizzle-orm": "^0.43.0",
     "fastify": "^5.0.0",
+    "fastify-plugin": "^5.1.0",
     "pg": "^8.0.0"
   },
   "devDependencies": {

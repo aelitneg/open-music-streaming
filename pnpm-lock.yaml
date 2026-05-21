@@ -19,12 +19,21 @@ importers:
 
   backend:
     dependencies:
+      '@atproto/oauth-client-node':
+        specifier: ^0.4.0
+        version: 0.4.0
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
       drizzle-orm:
         specifier: ^0.43.0
         version: 0.43.1(@types/pg@8.20.0)(pg@8.21.0)
       fastify:
         specifier: ^5.0.0
         version: 5.8.5
+      fastify-plugin:
+        specifier: ^5.1.0
+        version: 5.1.0
       pg:
         specifier: ^8.0.0
         version: 8.21.0
@@ -49,6 +58,160 @@ importers:
         version: 3.2.4(@types/node@22.19.19)(tsx@4.22.3)
 
 packages:
+  '@atproto-labs/did-resolver@0.3.0':
+    resolution:
+      {
+        integrity: sha512-6w8UxJQVj40TqKJm+D5s6pcH45eWH/KvfAR+gYC6KOux/mM7ZI3IKOhI1Gq7GIte1eOp9WXwASN1RQAFYZ4MFw==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/fetch-node@0.3.0':
+    resolution:
+      {
+        integrity: sha512-Dj4OlW8E7Hyk0vpJ31ThUp5PCXMVi2iwPhavWkiGhjLx+pAhcEsIEnvV2cf+cGJcYKXczLwIl1agoLUMSZq1ag==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/fetch@0.3.0':
+    resolution:
+      {
+        integrity: sha512-yZhNsRZyqhjmzHlXmE9k6XU0f6+ynfNyrHhB4FlEyUjkBvf5vNLjdJyBq+Jp7ISGMigA1fn2lAgaE/qkrVo9iw==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/handle-resolver-node@0.2.0':
+    resolution:
+      {
+        integrity: sha512-3hP3exJiNr7tdI2M3fCnUvPX3oA1663XsIUwZTTzxQf+R5TDvtcoJiWwp5KdCI1u2mVPpWrxKzjEEnrVQ4va6A==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/handle-resolver@0.4.0':
+    resolution:
+      {
+        integrity: sha512-+q4j19YKNenWHoOJQrs2nv9vDornYxQXLSUpFR3q3l0gFTUq/OHk0Hvw98I9044CbxQ6pSnlxxU7OfWFyaaw2Q==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/identity-resolver@0.4.0':
+    resolution:
+      {
+        integrity: sha512-6ZGeWminDTXfYE/jw6BqXm5Nrv2lTBox8wHsnWUQkOs2m0oam47dMcMf3KQfo3hNhRZmTY2JB/F0woRV5MvhpA==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/pipe@0.2.0':
+    resolution:
+      {
+        integrity: sha512-89X6gv+8/SiZYwJ4+Hw8iaU1WymbElZO6LsMgHd+c1XFs/78KhsIL4xp0RCs7/W8izK9BxaTEnYN5csRmwQ99Q==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/simple-store-memory@0.2.0':
+    resolution:
+      {
+        integrity: sha512-nDZIS6vOBvR8NqObGmj0GFSdz3N6gyQ7ny3l/uiezwuCWShsxtA9OkYcjaQ7Kw3hydXTe4iEGu/BDOACncnxDg==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto-labs/simple-store@0.4.0':
+    resolution:
+      {
+        integrity: sha512-sbPEju2QXzN6lGWfr5p2Kg82ZeaG1UyVFOrMQc4eCjUvxGOjIxuYOVIiTuPTFOC5Rsvsb8jMOmLjLi8FR/CMYw==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/common-web@0.5.0':
+    resolution:
+      {
+        integrity: sha512-ReWnkuZdDU/74/I47gaI26uxQjHmpq4edp41NnZZQ5vIIKGb7Ei6pZHzDTUD9JURo109SKrPx9RMP2IQm0fOKA==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/did@0.4.0':
+    resolution:
+      {
+        integrity: sha512-OADX1NXCkScMkNJmSQnTUfPoDJ2IoOUTtqVfuY4z+a8//JDIsY6FDygv3GR8Sh2laz5qodlCA7XM+u6XVine3g==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/jwk-jose@0.2.0':
+    resolution:
+      {
+        integrity: sha512-emI0XXWoZvcy64Q1NnVictPtez3p2jWUU5TMHxalIqo917z9QEJ/aMcso6X9YPfnbL8sa1n6VGo+5THBMobZzg==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/jwk-webcrypto@0.3.0':
+    resolution:
+      {
+        integrity: sha512-llguCJA5vlaTfNhWF1RTiRfg0HWCehTumZpQB84ZkhdJp6TBWgfMw431K6B2bE4FbGB3824v/+Q3Y2y8OQEltQ==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/jwk@0.7.0':
+    resolution:
+      {
+        integrity: sha512-HJ0crIKTbeTIiXCodgcgpaTcfKmeUE4IawjpoiVav1KFiIrD8ML2c7NdLETo8XnHuuj6DNzCtfD/381od/QjkA==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/lex-data@0.1.1':
+    resolution:
+      {
+        integrity: sha512-/xza8nU/YhtzhETnHL3QKKofaJ28/0NCzhT7LaYoUkm8EgypWp5ykEtmW52yLhQM2JF6fVa25g1soQmNTGqtSg==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/lex-json@0.1.0':
+    resolution:
+      {
+        integrity: sha512-oWUrRMwFyWpmi/5k1Se3xBTbP06XdxBS5iFuUz9LmqItaPXwrWRD87a9ldPvINQ/A2/mn7J6/qug8sDVlhD+vQ==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/lexicon@0.7.1':
+    resolution:
+      {
+        integrity: sha512-voNfNED5KUxn3vpo7N5DMRblBDfWf7kSfdKhJFC1RrLCxg38YbBzzURNVQJ32bp13Oot8kYfyXBWxTgtKLvw8w==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/oauth-client-node@0.4.0':
+    resolution:
+      {
+        integrity: sha512-YmhF0xWSiq2JI86Y/Kryi0PeTnVvIVjJ8lrK+LX3MPLQiYF+EYYUQGHrRccJLzWSVCxKNc+0lbNY8Z8JDittWg==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/oauth-client@0.7.1':
+    resolution:
+      {
+        integrity: sha512-lobofOc4hbxzT8NRmRbaW6CG7+MUd1BfRrJ8UEvYMiYCon34csKRfMcGgDZ/fnIjrWuMfwhjJGsIGq140YunJg==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/oauth-types@0.7.0':
+    resolution:
+      {
+        integrity: sha512-4o1pRBTnZrIqaXH3jg9K2XwkTlRb7ohp2BArQ1gNPYp2znrRiELmwjxqR3CH5KD1Dz64kJXoEkbeLKl0devkNw==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/syntax@0.6.1':
+    resolution:
+      {
+        integrity: sha512-kA4dQDoMPpWCH8N0Q4KoSq024u5MkVfDVa8DdhyLjGA72z/khbOf1jXKPv7NIL2oEc9aj7geKELdvqyf4ogopA==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/xrpc@0.8.0':
+    resolution:
+      {
+        integrity: sha512-NJy02bIKrWlE2NQkRV1kT0Cj0ixbuxlF/MejBdo4cPWAa9v3oZexvAcjjb0zaOYeABkaU14iyIhvn2G4e/oLpw==,
+      }
+    engines: { node: '>=22' }
+
   '@drizzle-team/brocli@0.10.2':
     resolution:
       {
@@ -1669,6 +1832,12 @@ packages:
       }
     engines: { node: '>=18' }
 
+  core-js@3.49.0:
+    resolution:
+      {
+        integrity: sha512-es1U2+YTtzpwkxVLwAFdSpaIMyQaq0PBgm3YD1W3Qpsn1NAmO3KSgZfu+oGSWVu6NvLHoHCV/aYcsE5wiB7ALg==,
+      }
+
   cross-spawn@7.0.6:
     resolution:
       {
@@ -1707,6 +1876,13 @@ packages:
         integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==,
       }
     engines: { node: '>=6' }
+
+  dotenv@17.4.2:
+    resolution:
+      {
+        integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==,
+      }
+    engines: { node: '>=12' }
 
   drizzle-kit@0.31.10:
     resolution:
@@ -1983,6 +2159,12 @@ packages:
         integrity: sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ==,
       }
 
+  fastify-plugin@5.1.0:
+    resolution:
+      {
+        integrity: sha512-FAIDA8eovSt5qcDgcBvDuX/v0Cjz0ohGhENZ/wpc3y+oZCY2afZ9Baqql3g/lC+OHRnciQol4ww7tuthOb9idw==,
+      }
+
   fastify@5.8.5:
     resolution:
       {
@@ -2131,6 +2313,18 @@ packages:
         integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==,
       }
 
+  iso-datestring-validator@2.2.2:
+    resolution:
+      {
+        integrity: sha512-yLEMkBbLZTlVQqOnQ4FiMujR6T4DEcCb1xizmvXS+OxuhwcbtynoosRzdMA69zZCShCNAbi+gJ71FxZBBXx1SA==,
+      }
+
+  jose@5.10.0:
+    resolution:
+      {
+        integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==,
+      }
+
   js-tokens@9.0.1:
     resolution:
       {
@@ -2212,6 +2406,12 @@ packages:
         integrity: sha512-CdzqowRJCeLU72bHvWqwRBBlLcMEtIvGrlvef74kMnV2AolS9Y8xUv1I0U/MNAWMhBlKIoyuEgoJ0t/bbwHbLQ==,
       }
 
+  lru-cache@10.4.3:
+    resolution:
+      {
+        integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==,
+      }
+
   magic-string@0.30.21:
     resolution:
       {
@@ -2235,6 +2435,12 @@ packages:
     resolution:
       {
         integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==,
+      }
+
+  multiformats@13.4.2:
+    resolution:
+      {
+        integrity: sha512-eh6eHCrRi1+POZ3dA+Dq1C6jhP1GNtr9CRINMb67OKzqW9I5DUuZM/3jLPlzhgpGeiNUlEGEbkCYChXMCc/8DQ==,
       }
 
   nanoid@3.3.12:
@@ -2721,6 +2927,12 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
+  tslib@2.8.1:
+    resolution:
+      {
+        integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==,
+      }
+
   tsx@4.22.3:
     resolution:
       {
@@ -2754,10 +2966,29 @@ packages:
     engines: { node: '>=14.17' }
     hasBin: true
 
+  uint8arrays@5.1.1:
+    resolution:
+      {
+        integrity: sha512-9muQwa4wZG4dKi9gMAIBtnk2Pw87SRpvWTH6lOGm19V2Uqxr4uomUf2PGqPnWc+qs06sN8owUU4jfcoWOcfwVQ==,
+      }
+
   undici-types@6.21.0:
     resolution:
       {
         integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==,
+      }
+
+  undici@6.25.0:
+    resolution:
+      {
+        integrity: sha512-ZgpWDC5gmNiuY9CnLVXEH8rl50xhRCuLNA97fAUnKi8RRuV4E6KG31pDTsLVUKnohJE0I3XDrTeEydAXRw47xg==,
+      }
+    engines: { node: '>=18.17' }
+
+  unicode-segmenter@0.14.5:
+    resolution:
+      {
+        integrity: sha512-jHGmj2LUuqDcX3hqY12Ql+uhUTn8huuxNZGq7GvtF6bSybzH3aFgedYu/KTzQStEgt1Ra2F3HxadNXsNjb3m3g==,
       }
 
   uri-js@4.4.1:
@@ -2885,7 +3116,150 @@ packages:
       }
     engines: { node: '>=10' }
 
+  zod@3.25.76:
+    resolution:
+      {
+        integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==,
+      }
+
 snapshots:
+  '@atproto-labs/did-resolver@0.3.0':
+    dependencies:
+      '@atproto-labs/fetch': 0.3.0
+      '@atproto-labs/pipe': 0.2.0
+      '@atproto-labs/simple-store': 0.4.0
+      '@atproto-labs/simple-store-memory': 0.2.0
+      '@atproto/did': 0.4.0
+      zod: 3.25.76
+
+  '@atproto-labs/fetch-node@0.3.0':
+    dependencies:
+      '@atproto-labs/fetch': 0.3.0
+      '@atproto-labs/pipe': 0.2.0
+      ipaddr.js: 2.4.0
+      undici: 6.25.0
+
+  '@atproto-labs/fetch@0.3.0':
+    dependencies:
+      '@atproto-labs/pipe': 0.2.0
+
+  '@atproto-labs/handle-resolver-node@0.2.0':
+    dependencies:
+      '@atproto-labs/fetch-node': 0.3.0
+      '@atproto-labs/handle-resolver': 0.4.0
+      '@atproto/did': 0.4.0
+
+  '@atproto-labs/handle-resolver@0.4.0':
+    dependencies:
+      '@atproto-labs/simple-store': 0.4.0
+      '@atproto-labs/simple-store-memory': 0.2.0
+      '@atproto/did': 0.4.0
+      zod: 3.25.76
+
+  '@atproto-labs/identity-resolver@0.4.0':
+    dependencies:
+      '@atproto-labs/did-resolver': 0.3.0
+      '@atproto-labs/handle-resolver': 0.4.0
+
+  '@atproto-labs/pipe@0.2.0': {}
+
+  '@atproto-labs/simple-store-memory@0.2.0':
+    dependencies:
+      '@atproto-labs/simple-store': 0.4.0
+      lru-cache: 10.4.3
+
+  '@atproto-labs/simple-store@0.4.0': {}
+
+  '@atproto/common-web@0.5.0':
+    dependencies:
+      '@atproto/lex-data': 0.1.1
+      '@atproto/lex-json': 0.1.0
+      '@atproto/syntax': 0.6.1
+      zod: 3.25.76
+
+  '@atproto/did@0.4.0':
+    dependencies:
+      zod: 3.25.76
+
+  '@atproto/jwk-jose@0.2.0':
+    dependencies:
+      '@atproto/jwk': 0.7.0
+      jose: 5.10.0
+
+  '@atproto/jwk-webcrypto@0.3.0':
+    dependencies:
+      '@atproto/jwk': 0.7.0
+      '@atproto/jwk-jose': 0.2.0
+      zod: 3.25.76
+
+  '@atproto/jwk@0.7.0':
+    dependencies:
+      multiformats: 13.4.2
+      zod: 3.25.76
+
+  '@atproto/lex-data@0.1.1':
+    dependencies:
+      multiformats: 13.4.2
+      tslib: 2.8.1
+      uint8arrays: 5.1.1
+      unicode-segmenter: 0.14.5
+
+  '@atproto/lex-json@0.1.0':
+    dependencies:
+      '@atproto/lex-data': 0.1.1
+      tslib: 2.8.1
+
+  '@atproto/lexicon@0.7.1':
+    dependencies:
+      '@atproto/common-web': 0.5.0
+      '@atproto/syntax': 0.6.1
+      multiformats: 13.4.2
+      zod: 3.25.76
+
+  '@atproto/oauth-client-node@0.4.0':
+    dependencies:
+      '@atproto-labs/did-resolver': 0.3.0
+      '@atproto-labs/handle-resolver-node': 0.2.0
+      '@atproto-labs/simple-store': 0.4.0
+      '@atproto/did': 0.4.0
+      '@atproto/jwk': 0.7.0
+      '@atproto/jwk-jose': 0.2.0
+      '@atproto/jwk-webcrypto': 0.3.0
+      '@atproto/oauth-client': 0.7.1
+      '@atproto/oauth-types': 0.7.0
+
+  '@atproto/oauth-client@0.7.1':
+    dependencies:
+      '@atproto-labs/did-resolver': 0.3.0
+      '@atproto-labs/fetch': 0.3.0
+      '@atproto-labs/handle-resolver': 0.4.0
+      '@atproto-labs/identity-resolver': 0.4.0
+      '@atproto-labs/simple-store': 0.4.0
+      '@atproto-labs/simple-store-memory': 0.2.0
+      '@atproto/did': 0.4.0
+      '@atproto/jwk': 0.7.0
+      '@atproto/oauth-types': 0.7.0
+      '@atproto/xrpc': 0.8.0
+      core-js: 3.49.0
+      multiformats: 13.4.2
+      zod: 3.25.76
+
+  '@atproto/oauth-types@0.7.0':
+    dependencies:
+      '@atproto/did': 0.4.0
+      '@atproto/jwk': 0.7.0
+      zod: 3.25.76
+
+  '@atproto/syntax@0.6.1':
+    dependencies:
+      iso-datestring-validator: 2.2.2
+      tslib: 2.8.1
+
+  '@atproto/xrpc@0.8.0':
+    dependencies:
+      '@atproto/lexicon': 0.7.1
+      zod: 3.25.76
+
   '@drizzle-team/brocli@0.10.2': {}
 
   '@esbuild-kit/core-utils@3.3.2':
@@ -3603,6 +3977,8 @@ snapshots:
 
   cookie@1.1.1: {}
 
+  core-js@3.49.0: {}
+
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -3618,6 +3994,8 @@ snapshots:
   deep-is@0.1.4: {}
 
   dequal@2.0.3: {}
+
+  dotenv@17.4.2: {}
 
   drizzle-kit@0.31.10:
     dependencies:
@@ -3844,6 +4222,8 @@ snapshots:
 
   fast-uri@3.1.2: {}
 
+  fastify-plugin@5.1.0: {}
+
   fastify@5.8.5:
     dependencies:
       '@fastify/ajv-compiler': 4.0.5
@@ -3928,6 +4308,10 @@ snapshots:
 
   isexe@2.0.0: {}
 
+  iso-datestring-validator@2.2.2: {}
+
+  jose@5.10.0: {}
+
   js-tokens@9.0.1: {}
 
   js-yaml@4.1.1:
@@ -3969,6 +4353,8 @@ snapshots:
 
   loupe@3.2.1: {}
 
+  lru-cache@10.4.3: {}
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -3982,6 +4368,8 @@ snapshots:
       brace-expansion: 1.1.14
 
   ms@2.1.3: {}
+
+  multiformats@13.4.2: {}
 
   nanoid@3.3.12: {}
 
@@ -4226,6 +4614,8 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
+  tslib@2.8.1: {}
+
   tsx@4.22.3:
     dependencies:
       esbuild: 0.28.0
@@ -4249,7 +4639,15 @@ snapshots:
 
   typescript@5.9.3: {}
 
+  uint8arrays@5.1.1:
+    dependencies:
+      multiformats: 13.4.2
+
   undici-types@6.21.0: {}
+
+  undici@6.25.0: {}
+
+  unicode-segmenter@0.14.5: {}
 
   uri-js@4.4.1:
     dependencies:
@@ -4344,3 +4742,5 @@ snapshots:
   xtend@4.0.2: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@3.25.76: {}
