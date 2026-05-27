@@ -1,7 +1,7 @@
 # 0003: OAuth Loopback Session Handoff
 
 **Date:** 2026-05-21
-**Status:** Accepted
+**Status:** Superseded by [0005 — Use 127.0.0.1 as the Local Development Origin](0005-127-0-0-1-local-dev-origin.md)
 
 ## Context
 

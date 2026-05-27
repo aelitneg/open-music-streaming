@@ -30,6 +30,12 @@ cp .env.example .env
 | `PDS_JWT_SECRET`                            | Random secret — generate with `openssl rand -hex 32`           |
 | `PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX` | Secp256k1 private key — generate with `openssl rand -hex 32`   |
 
+### Local development origin
+
+**Access the app at `http://127.0.0.1:8080`, not `http://localhost:8080`.**
+
+The AT Protocol PDS rejects OAuth requests from `localhost` because the browser sets `Sec-Fetch-Site: same-site` when both the frontend and PDS share that hostname. Using `127.0.0.1` for the frontend makes the navigation cross-site, which the PDS requires. The session cookie is also scoped to `127.0.0.1`, so using `localhost` will silently break authentication. See [docs/decisions/0005](docs/decisions/0005-127-0-0-1-local-dev-origin.md) for the full rationale.
+
 ### Stack
 
 | Service    | Description                                 | Local port |

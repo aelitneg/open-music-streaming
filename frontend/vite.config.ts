@@ -12,6 +12,11 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
     port: 8080,
+    proxy: {
+      '/auth': 'http://localhost:4000',
+      '/oauth': 'http://localhost:4000',
+    },
   },
 });
