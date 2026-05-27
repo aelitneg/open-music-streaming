@@ -85,6 +85,7 @@ export default fp(async (app) => {
     sessionStore: new SessionStore(app.db),
     plcDirectoryUrl: process.env.PLC_URL ?? 'https://plc.directory',
     handleResolver: process.env.PDS_URL ?? 'https://bsky.social',
+    allowHttp: process.env.NODE_ENV !== 'production',
   });
 
   app.decorate('oauthClient', oauthClient);

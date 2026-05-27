@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import dbPlugin from './plugins/db.js';
 import oauthPlugin from './plugins/oauth.js';
 import rootRoute from './routes/root.js';
+import authRoutes from './routes/auth.js';
 
 export function buildApp() {
   const app = Fastify({ logger: true });
@@ -9,6 +10,7 @@ export function buildApp() {
   app.register(dbPlugin);
   app.register(oauthPlugin);
   app.register(rootRoute);
+  app.register(authRoutes);
 
   return app;
 }
