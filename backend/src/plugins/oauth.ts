@@ -85,6 +85,9 @@ export default fp(async (app) => {
     sessionStore: new SessionStore(app.db),
     plcDirectoryUrl: process.env.PLC_URL ?? 'https://plc.directory',
     handleResolver: process.env.PDS_URL ?? 'https://bsky.social',
+    // The local PDS and PLC run over HTTP. Without this flag, the client refuses
+    // to fetch OAuth server metadata from non-HTTPS URLs. Safe to enable outside
+    // production since the loopback client metadata already restricts scope.
     allowHttp: process.env.NODE_ENV !== 'production',
   });
 
