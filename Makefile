@@ -11,7 +11,7 @@ POSTGRES_USER     := $(shell grep -E '^POSTGRES_USER=' .env | tail -1 | cut -d= 
 POSTGRES_PASSWORD := $(shell grep -E '^POSTGRES_PASSWORD=' .env | tail -1 | cut -d= -f2-)
 DATABASE_URL      := postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/app
 
-.PHONY: plc-build stack-up stack-down create-account backend-up db-generate db-migrate db-studio
+.PHONY: plc-build stack-up stack-down create-account backend-up frontend-up db-generate db-migrate db-studio
 
 $(PLC_DIR)/.git:
 	git clone $(PLC_REPO) $(PLC_DIR)
@@ -27,6 +27,9 @@ stack-down:
 
 backend-up:
 	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend dev
+
+frontend-up:
+	pnpm --filter frontend dev
 
 db-generate:
 	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:generate

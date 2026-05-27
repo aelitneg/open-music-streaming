@@ -38,6 +38,7 @@ cp .env.example .env
 | PLC        | DID PLC directory (built from source)       | `2582`     |
 | PDS        | AT Protocol Personal Data Server (dev mode) | `3000`     |
 | Backend    | App View REST API                           | `4000`     |
+| Frontend   | Web client (Vite dev server)                | `8080`     |
 
 ### Commands
 
@@ -46,6 +47,7 @@ cp .env.example .env
 | `make stack-up`       | Build the PLC image and start the stack        |
 | `make stack-down`     | Stop the stack                                 |
 | `make backend-up`     | Start the backend API dev server (port 4000)   |
+| `make frontend-up`    | Start the frontend dev server (port 8080)      |
 | `make db-generate`    | Generate a SQL migration from schema changes   |
 | `make db-migrate`     | Apply pending migrations to the database       |
 | `make db-studio`      | Open Drizzle Studio (local DB GUI)             |

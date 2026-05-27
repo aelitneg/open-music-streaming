@@ -50,6 +50,7 @@ The local development environment is controlled with `make`:
 | `make stack-up`       | Build PLC image and start all services         |
 | `make stack-down`     | Stop all services                              |
 | `make backend-up`     | Start backend API dev server (port 4000)       |
+| `make frontend-up`    | Start frontend dev server (port 8080)          |
 | `make db-generate`    | Generate SQL migration from schema diff        |
 | `make db-migrate`     | Apply pending migrations to the database       |
 | `make db-studio`      | Open Drizzle Studio (local DB GUI)             |
