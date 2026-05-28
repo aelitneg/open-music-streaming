@@ -15,7 +15,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export type SessionResponse =
-  | { authenticated: true; did: string }
+  | { authenticated: true; did: string; handle: string }
   | { authenticated: false };
 
 export function getSession(): Promise<SessionResponse> {

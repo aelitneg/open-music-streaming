@@ -1,8 +1,9 @@
 import fp from 'fastify-plugin';
+import { Agent } from '@atproto/api';
 import { isValidHandle } from '@atproto/syntax';
 import { getIronSession } from 'iron-session';
 
-type Session = { did: string };
+type Session = { did: string; handle: string };
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 if (!COOKIE_SECRET) throw new Error('COOKIE_SECRET is not set');
@@ -54,12 +55,19 @@ export default fp(async (app) => {
     try {
       const { session: oauthSession } = await app.oauthClient.callback(params);
 
+      const agent = new Agent(oauthSession);
+      const { data: repo } = await agent.com.atproto.repo.describeRepo({
+        repo: oauthSession.did,
+      });
+      const { handle } = repo;
+
       const session = await getIronSession<Session>(
         request.raw,
         reply.raw,
         sessionOptions,
       );
       session.did = oauthSession.did;
+      session.handle = handle;
       await session.save();
 
       const frontendUrl = process.env.FRONTEND_URL ?? '/';
@@ -82,7 +90,7 @@ export default fp(async (app) => {
       return reply.status(401).send({ authenticated: false });
     }
 
-    return { authenticated: true, did: session.did };
+    return { authenticated: true, did: session.did, handle: session.handle };
   });
 
   // Revokes the OAuth session and destroys the cookie

@@ -19,6 +19,9 @@ importers:
 
   backend:
     dependencies:
+      '@atproto/api':
+        specifier: ^0.20.6
+        version: 0.20.6
       '@atproto/oauth-client-node':
         specifier: ^0.4.0
         version: 0.4.0
@@ -215,6 +218,13 @@ packages:
     resolution:
       {
         integrity: sha512-sbPEju2QXzN6lGWfr5p2Kg82ZeaG1UyVFOrMQc4eCjUvxGOjIxuYOVIiTuPTFOC5Rsvsb8jMOmLjLi8FR/CMYw==,
+      }
+    engines: { node: '>=22' }
+
+  '@atproto/api@0.20.6':
+    resolution:
+      {
+        integrity: sha512-WnFPcUl+qZdXmt27+Tg93BDIvBt/WpXfLIiBzBTp3ms9aszM5hAsfc7G8KEsnsmnRvcm0xRfiKEjIt5FxTKdYg==,
       }
     engines: { node: '>=22' }
 
@@ -2840,6 +2850,12 @@ packages:
     resolution:
       {
         integrity: sha512-2t/sy01ArdHHE0vRH5Hsay+RtCZt3dLPji7W7/MMOCEgze5b7SNDC4j5H6FnVgPkI1MTNFGzHdHrVXDDl7QSSQ==,
+      }
+
+  await-lock@3.0.0:
+    resolution:
+      {
+        integrity: sha512-eO6fLiSnrJrMdjWMNK8zbVRXPs2TKJg78iKZd9wDpN3na5tcoV6EoeiOlMgk2QaAQ1gIrK1YuMsJHXWqz89tSA==,
       }
 
   balanced-match@1.0.2:
@@ -5747,6 +5763,13 @@ packages:
       }
     engines: { node: '>=14.0.0' }
 
+  tlds@1.261.0:
+    resolution:
+      {
+        integrity: sha512-QXqwfEl9ddlGBaRFXIvNKK6OhipSiLXuRuLJX5DErz0o0Q0rYxulWLdFryTkV5PkdZct5iMInwYEGe/eR++1AA==,
+      }
+    hasBin: true
+
   tldts-core@7.4.0:
     resolution:
       {
@@ -6316,6 +6339,17 @@ snapshots:
       lru-cache: 10.4.3
 
   '@atproto-labs/simple-store@0.4.0': {}
+
+  '@atproto/api@0.20.6':
+    dependencies:
+      '@atproto/common-web': 0.5.0
+      '@atproto/lexicon': 0.7.1
+      '@atproto/syntax': 0.6.1
+      '@atproto/xrpc': 0.8.0
+      await-lock: 3.0.0
+      multiformats: 13.4.2
+      tlds: 1.261.0
+      zod: 3.25.76
 
   '@atproto/common-web@0.5.0':
     dependencies:
@@ -7518,10 +7552,10 @@ snapshots:
 
   '@types/validate-npm-package-name@4.0.2': {}
 
-  '@typescript-eslint/eslint-plugin@8.59.4(@typescript-eslint/parser@8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
+  '@typescript-eslint/eslint-plugin@8.59.4(@typescript-eslint/parser@8.59.4(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
-      '@typescript-eslint/parser': 8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@typescript-eslint/parser': 8.59.4(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3)
       '@typescript-eslint/scope-manager': 8.59.4
       '@typescript-eslint/type-utils': 8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@typescript-eslint/utils': 8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
@@ -7765,6 +7799,8 @@ snapshots:
     dependencies:
       '@fastify/error': 4.2.0
       fastq: 1.20.1
+
+  await-lock@3.0.0: {}
 
   balanced-match@1.0.2: {}
 
@@ -9488,6 +9524,8 @@ snapshots:
 
   tinyspy@4.0.4: {}
 
+  tlds@1.261.0: {}
+
   tldts-core@7.4.0: {}
 
   tldts@7.4.0:
@@ -9547,7 +9585,7 @@ snapshots:
 
   typescript-eslint@8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.59.4(@typescript-eslint/parser@8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@typescript-eslint/eslint-plugin': 8.59.4(@typescript-eslint/parser@8.59.4(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@typescript-eslint/parser': 8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@typescript-eslint/typescript-estree': 8.59.4(typescript@6.0.3)
       '@typescript-eslint/utils': 8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
