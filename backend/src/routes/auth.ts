@@ -74,7 +74,10 @@ export default fp(async (app) => {
       return reply.redirect(frontendUrl);
     } catch (err) {
       app.log.error({ err }, 'oauth callback failed');
-      return reply.status(500).send({ error: 'oauth callback failed' });
+      const frontendBase = process.env.FRONTEND_URL ?? 'http://localhost:8080';
+      const signinUrl = new URL('/signin', frontendBase);
+      signinUrl.searchParams.set('error', 'callback_failed');
+      return reply.redirect(signinUrl.toString());
     }
   });
 

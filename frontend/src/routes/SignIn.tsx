@@ -1,18 +1,27 @@
 import { useForm } from 'react-hook-form';
-import { Navigate } from 'react-router';
+import { Navigate, useSearchParams } from 'react-router';
 import { login } from '@/lib/api';
 import { useSession } from '@/hooks/useSession';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { CircleAlert } from 'lucide-react';
 
 const HANDLE_RE =
   /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/;
 
 type FormValues = { handle: string };
 
+const CALLBACK_ERROR_MESSAGES: Record<string, string> = {
+  access_denied: 'Sign in was cancelled.',
+  callback_failed: 'Sign in failed. Please try again.',
+};
+
 export default function SignIn() {
   const { data, isLoading: sessionLoading } = useSession();
+  const [searchParams] = useSearchParams();
+  const callbackError = searchParams.get('error');
 
   const {
     register,
@@ -92,6 +101,16 @@ export default function SignIn() {
             >
               {isSubmitting ? 'Signing in…' : 'Sign in'}
             </Button>
+
+            {callbackError && (
+              <Alert variant="destructive">
+                <CircleAlert />
+                <AlertDescription>
+                  {CALLBACK_ERROR_MESSAGES[callbackError] ??
+                    'Sign in failed. Please try again.'}
+                </AlertDescription>
+              </Alert>
+            )}
           </form>
         </div>
       </div>
