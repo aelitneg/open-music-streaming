@@ -1,0 +1,51 @@
+{
+  "lexicon": 1,
+  "id": "local.open-music-streaming.song",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "A musical track published to an AT Protocol personal data server. Links the creator's DID to an audio blob with optional display metadata.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["did", "title", "audio", "createdAt"],
+        "properties": {
+          "did": {
+            "type": "string",
+            "format": "did",
+            "description": "The AT Protocol DID of the artist who owns this record. The canonical persistent identifier for the artist's identity."
+          },
+          "title": {
+            "type": "string",
+            "maxGraphemes": 300,
+            "maxLength": 3000,
+            "description": "The title of the song."
+          },
+          "artist": {
+            "type": "string",
+            "maxGraphemes": 300,
+            "maxLength": 3000,
+            "description": "The display name of the artist. Optional — identity can always be resolved from the did field."
+          },
+          "album": {
+            "type": "string",
+            "maxGraphemes": 300,
+            "maxLength": 3000,
+            "description": "The album this song belongs to, if applicable."
+          },
+          "audio": {
+            "type": "blob",
+            "accept": ["audio/*"],
+            "maxSize": 52428800,
+            "description": "The audio file. Accepts any audio/* MIME type (e.g. audio/mpeg, audio/flac, audio/wav)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Timestamp when this record was created, in ISO 8601 / RFC 3339 format."
+          }
+        }
+      }
+    }
+  }
+}
