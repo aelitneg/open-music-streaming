@@ -6,6 +6,7 @@ import sessionPlugin from './plugins/session.js';
 import rootRoute from './routes/root.js';
 import authRoutes from './routes/auth.js';
 import artistRoutes from './routes/artists.js';
+import albumRoutes from './routes/albums.js';
 
 export function buildApp() {
   const app = Fastify({ logger: true });
@@ -17,6 +18,7 @@ export function buildApp() {
   app.register(rootRoute);
   app.register(authRoutes);
   app.register(artistRoutes);
+  app.register(albumRoutes);
 
   return app;
 }
