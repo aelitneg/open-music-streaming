@@ -5,6 +5,7 @@ import oauthPlugin from './plugins/oauth.js';
 import sessionPlugin from './plugins/session.js';
 import rootRoute from './routes/root.js';
 import authRoutes from './routes/auth.js';
+import artistRoutes from './routes/artists.js';
 
 export function buildApp() {
   const app = Fastify({ logger: true });
@@ -15,6 +16,7 @@ export function buildApp() {
   app.register(sessionPlugin);
   app.register(rootRoute);
   app.register(authRoutes);
+  app.register(artistRoutes);
 
   return app;
 }
