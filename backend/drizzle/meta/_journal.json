@@ -8,6 +8,20 @@
       "when": 1779315500273,
       "tag": "0000_atproto_auth",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1780522783846,
+      "tag": "0001_users",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780523145442,
+      "tag": "0002_artists_albums_songs",
+      "breakpoints": true
     }
   ]
 }

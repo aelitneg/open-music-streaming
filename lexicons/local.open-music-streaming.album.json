@@ -1,0 +1,38 @@
+{
+  "lexicon": 1,
+  "id": "local.open-music-streaming.album",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "An album published to an AT Protocol personal data server. Groups songs under a named release by a specific artist.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["did", "artist", "title", "createdAt"],
+        "properties": {
+          "did": {
+            "type": "string",
+            "format": "did",
+            "description": "The AT Protocol DID of the account that owns this album record."
+          },
+          "artist": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "AT URI of the artist record associated with this album (local.open-music-streaming.artist)."
+          },
+          "title": {
+            "type": "string",
+            "maxGraphemes": 300,
+            "maxLength": 3000,
+            "description": "The title of the album."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Timestamp when this record was created, in ISO 8601 / RFC 3339 format."
+          }
+        }
+      }
+    }
+  }
+}

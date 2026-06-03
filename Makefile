@@ -32,7 +32,7 @@ frontend-up:
 	pnpm --filter frontend dev
 
 db-generate:
-	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:generate
+	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:generate $(if $(NAME),--name $(NAME),)
 
 db-migrate:
 	DATABASE_URL=$(DATABASE_URL) pnpm --filter open-music-streaming-backend db:migrate

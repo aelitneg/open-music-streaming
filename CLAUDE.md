@@ -45,16 +45,17 @@ Migration files live in `backend/drizzle/` and are committed to git. `DATABASE_U
 
 The local development environment is controlled with `make`:
 
-| Command               | Description                                    |
-| --------------------- | ---------------------------------------------- |
-| `make stack-up`       | Build PLC image and start all services         |
-| `make stack-down`     | Stop all services                              |
-| `make backend-up`     | Start backend API dev server (port 4000)       |
-| `make frontend-up`    | Start frontend dev server (port 8080)          |
-| `make db-generate`    | Generate SQL migration from schema diff        |
-| `make db-migrate`     | Apply pending migrations to the database       |
-| `make db-studio`      | Open Drizzle Studio (local DB GUI)             |
-| `make create-account` | Create an AT Protocol account on the local PDS |
+| Command                        | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `make stack-up`                | Build PLC image and start all services         |
+| `make stack-down`              | Stop all services                              |
+| `make backend-up`              | Start backend API dev server (port 4000)       |
+| `make frontend-up`             | Start frontend dev server (port 8080)          |
+| `make db-generate`             | Generate SQL migration from schema diff        |
+| `make db-generate NAME=<name>` | Generate migration with a custom name          |
+| `make db-migrate`              | Apply pending migrations to the database       |
+| `make db-studio`               | Open Drizzle Studio (local DB GUI)             |
+| `make create-account`          | Create an AT Protocol account on the local PDS |
 
 Services (defined in `docker-compose.yml`):
 
