@@ -1,23 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { buildApp } from '../app.js';
+import {
+  TEST_DID,
+  TEST_HANDLE,
+  makeDbMock,
+  setupDefaultAuth,
+} from './helpers.js';
 
-const TEST_DID = 'did:plc:test123';
-const TEST_HANDLE = 'test.bsky.social';
 const TEST_RKEY = 'abc123tid';
 const TEST_URI = `at://${TEST_DID}/local.open-music-streaming.artist/${TEST_RKEY}`;
-
-// Hoist mock functions so they're available in vi.mock factory scope
-const { mockPutRecord, mockRequireAuth } = vi.hoisted(() => {
-  const mockPutRecord = vi.fn();
-  const mockRequireAuth = vi.fn();
-  return { mockPutRecord, mockRequireAuth };
-});
-
-// Replace requireAuth with a controllable mock; keep the actual session plugin
-vi.mock('../plugins/session.js', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../plugins/session.js')>();
-  return { ...actual, requireAuth: mockRequireAuth };
-});
 
 function makeArtistRow(overrides: Record<string, unknown> = {}) {
   return {
@@ -30,32 +21,19 @@ function makeArtistRow(overrides: Record<string, unknown> = {}) {
   };
 }
 
-// Build a chainable DB mock. .where() returns a thenable that also has .limit().
-function makeDbMock({ selectResult = [] as unknown[], insertOk = true } = {}) {
-  const whereResult = Object.assign(Promise.resolve(selectResult), {
-    limit: vi.fn().mockResolvedValue(selectResult),
-  });
+const { mockPutRecord, mockRequireAuth } = vi.hoisted(() => {
+  return { mockPutRecord: vi.fn(), mockRequireAuth: vi.fn() };
+});
 
-  return {
-    select: vi.fn(() => ({ from: vi.fn(() => ({ where: vi.fn(() => whereResult) })) })),
-    insert: vi.fn(() => ({
-      values: insertOk ? vi.fn().mockResolvedValue([]) : vi.fn().mockRejectedValue(new Error('db error')),
-    })),
-    update: vi.fn(() => ({ set: vi.fn(() => ({ where: vi.fn().mockResolvedValue([]) })) })),
-  };
-}
-
-function setupDefaultAuth() {
-  mockRequireAuth.mockImplementation(async (request: any) => {
-    request.session = { did: TEST_DID, handle: TEST_HANDLE };
-    request.agent = { com: { atproto: { repo: { putRecord: mockPutRecord } } } };
-  });
-}
+vi.mock('../plugins/session.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../plugins/session.js')>();
+  return { ...actual, requireAuth: mockRequireAuth };
+});
 
 describe('GET /artists', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    setupDefaultAuth();
+    setupDefaultAuth(mockRequireAuth, mockPutRecord);
   });
 
   it('returns 401 when not authenticated', async () => {
@@ -71,20 +49,23 @@ describe('GET /artists', () => {
   });
 
   it('returns the authenticated users artist profiles', async () => {
-    const artist = makeArtistRow();
     const app = buildApp();
     await app.ready();
-    (app as any).db = makeDbMock({ selectResult: [artist] });
+    (app as any).db = makeDbMock({ selectResult: [makeArtistRow()] });
 
     const response = await app.inject({ method: 'GET', url: '/artists' });
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual({ artists: [expect.objectContaining({ uri: TEST_URI, name: 'Test Artist' })] });
+    expect(response.json()).toEqual({
+      artists: [
+        expect.objectContaining({ uri: TEST_URI, name: 'Test Artist' }),
+      ],
+    });
   });
 
   it('returns an empty list when the user has no artists', async () => {
     const app = buildApp();
     await app.ready();
-    (app as any).db = makeDbMock({ selectResult: [] });
+    (app as any).db = makeDbMock();
 
     const response = await app.inject({ method: 'GET', url: '/artists' });
     expect(response.statusCode).toBe(200);
@@ -95,8 +76,10 @@ describe('GET /artists', () => {
 describe('POST /artists', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    setupDefaultAuth();
-    mockPutRecord.mockResolvedValue({ data: { uri: TEST_URI, cid: 'bafytest' } });
+    setupDefaultAuth(mockRequireAuth, mockPutRecord);
+    mockPutRecord.mockResolvedValue({
+      data: { uri: TEST_URI, cid: 'bafytest' },
+    });
   });
 
   it('returns 401 when not authenticated', async () => {
@@ -120,7 +103,11 @@ describe('POST /artists', () => {
     await app.ready();
     (app as any).db = makeDbMock();
 
-    const response = await app.inject({ method: 'POST', url: '/artists', payload: {} });
+    const response = await app.inject({
+      method: 'POST',
+      url: '/artists',
+      payload: {},
+    });
     expect(response.statusCode).toBe(400);
     expect(response.json()).toEqual({ error: 'name is required' });
   });
@@ -130,7 +117,11 @@ describe('POST /artists', () => {
     await app.ready();
     (app as any).db = makeDbMock();
 
-    const response = await app.inject({ method: 'POST', url: '/artists', payload: { name: '   ' } });
+    const response = await app.inject({
+      method: 'POST',
+      url: '/artists',
+      payload: { name: '   ' },
+    });
     expect(response.statusCode).toBe(400);
     expect(response.json()).toEqual({ error: 'name is required' });
   });
@@ -145,10 +136,12 @@ describe('POST /artists', () => {
       url: '/artists',
       payload: { name: 'My Artist' },
     });
-
     expect(response.statusCode).toBe(201);
-    const body = response.json();
-    expect(body).toMatchObject({ uri: TEST_URI, did: TEST_DID, name: 'My Artist' });
+    expect(response.json()).toMatchObject({
+      uri: TEST_URI,
+      did: TEST_DID,
+      name: 'My Artist',
+    });
     expect(mockPutRecord).toHaveBeenCalledOnce();
   });
 
@@ -162,7 +155,6 @@ describe('POST /artists', () => {
       url: '/artists',
       payload: { name: '  My Artist  ' },
     });
-
     expect(response.statusCode).toBe(201);
     expect(response.json().name).toBe('My Artist');
   });
@@ -171,8 +163,10 @@ describe('POST /artists', () => {
 describe('PATCH /artists/:rkey', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    setupDefaultAuth();
-    mockPutRecord.mockResolvedValue({ data: { uri: TEST_URI, cid: 'bafytest' } });
+    setupDefaultAuth(mockRequireAuth, mockPutRecord);
+    mockPutRecord.mockResolvedValue({
+      data: { uri: TEST_URI, cid: 'bafytest' },
+    });
   });
 
   it('returns 401 when not authenticated', async () => {
@@ -208,7 +202,7 @@ describe('PATCH /artists/:rkey', () => {
   it('returns 404 when the artist does not exist', async () => {
     const app = buildApp();
     await app.ready();
-    (app as any).db = makeDbMock({ selectResult: [] });
+    (app as any).db = makeDbMock();
 
     const response = await app.inject({
       method: 'PATCH',
@@ -220,19 +214,20 @@ describe('PATCH /artists/:rkey', () => {
   });
 
   it('updates the artist name and returns the updated record', async () => {
-    const existing = makeArtistRow();
     const app = buildApp();
     await app.ready();
-    (app as any).db = makeDbMock({ selectResult: [existing] });
+    (app as any).db = makeDbMock({ selectResult: [makeArtistRow()] });
 
     const response = await app.inject({
       method: 'PATCH',
       url: `/artists/${TEST_RKEY}`,
       payload: { name: 'Updated Name' },
     });
-
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toMatchObject({ uri: TEST_URI, name: 'Updated Name' });
+    expect(response.json()).toMatchObject({
+      uri: TEST_URI,
+      name: 'Updated Name',
+    });
     expect(mockPutRecord).toHaveBeenCalledOnce();
   });
 });

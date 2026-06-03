@@ -3,8 +3,7 @@ import { and, eq } from 'drizzle-orm';
 import { TID } from '@atproto/common-web';
 import { requireAuth } from '../plugins/session.js';
 import { artists } from '../db/schema.js';
-
-const COLLECTION = 'local.open-music-streaming.artist';
+import { ARTIST_COLLECTION as COLLECTION } from '../lib/collections.js';
 
 export default fp(async (app) => {
   app.get('/artists', { preHandler: requireAuth }, async (request) => {
@@ -38,47 +37,58 @@ export default fp(async (app) => {
 
     const uri = result.data.uri;
 
-    await app.db.insert(artists).values({ uri, did, name: trimmedName, createdAt });
+    await app.db
+      .insert(artists)
+      .values({ uri, did, name: trimmedName, createdAt });
 
     return reply.status(201).send({ uri, did, name: trimmedName, createdAt });
   });
 
-  app.patch('/artists/:rkey', { preHandler: requireAuth }, async (request, reply) => {
-    const { rkey } = request.params as { rkey: string };
-    const { name } = request.body as { name?: unknown };
+  app.patch(
+    '/artists/:rkey',
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const { rkey } = request.params as { rkey: string };
+      const { name } = request.body as { name?: unknown };
 
-    if (typeof name !== 'string' || name.trim().length === 0) {
-      return reply.status(400).send({ error: 'name is required' });
-    }
+      if (typeof name !== 'string' || name.trim().length === 0) {
+        return reply.status(400).send({ error: 'name is required' });
+      }
 
-    const { did } = request.session;
-    const uri = `at://${did}/${COLLECTION}/${rkey}`;
-    const trimmedName = name.trim();
+      const { did } = request.session;
+      const uri = `at://${did}/${COLLECTION}/${rkey}`;
+      const trimmedName = name.trim();
 
-    const [existing] = await app.db
-      .select()
-      .from(artists)
-      .where(and(eq(artists.uri, uri), eq(artists.did, did)))
-      .limit(1);
+      const [existing] = await app.db
+        .select()
+        .from(artists)
+        .where(and(eq(artists.uri, uri), eq(artists.did, did)))
+        .limit(1);
 
-    if (!existing) {
-      return reply.status(404).send({ error: 'artist not found' });
-    }
+      if (!existing) {
+        return reply.status(404).send({ error: 'artist not found' });
+      }
 
-    // TODO: putRecord + DB write should be a single transaction with compensation on failure.
-    await request.agent.com.atproto.repo.putRecord({
-      repo: did,
-      collection: COLLECTION,
-      rkey,
-      record: { $type: COLLECTION, did, name: trimmedName, createdAt: existing.createdAt },
-      validate: false,
-    });
+      // TODO: putRecord + DB write should be a single transaction with compensation on failure.
+      await request.agent.com.atproto.repo.putRecord({
+        repo: did,
+        collection: COLLECTION,
+        rkey,
+        record: {
+          $type: COLLECTION,
+          did,
+          name: trimmedName,
+          createdAt: existing.createdAt,
+        },
+        validate: false,
+      });
 
-    await app.db
-      .update(artists)
-      .set({ name: trimmedName })
-      .where(eq(artists.uri, uri));
+      await app.db
+        .update(artists)
+        .set({ name: trimmedName })
+        .where(eq(artists.uri, uri));
 
-    return { ...existing, name: trimmedName };
-  });
+      return { ...existing, name: trimmedName };
+    },
+  );
 });
