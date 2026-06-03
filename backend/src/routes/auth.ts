@@ -1,17 +1,6 @@
 import fp from 'fastify-plugin';
 import { Agent } from '@atproto/api';
 import { isValidHandle } from '@atproto/syntax';
-import { getIronSession } from 'iron-session';
-
-type Session = { did: string; handle: string };
-
-const COOKIE_SECRET = process.env.COOKIE_SECRET;
-if (!COOKIE_SECRET) throw new Error('COOKIE_SECRET is not set');
-
-const sessionOptions = {
-  cookieName: 'sid',
-  password: COOKIE_SECRET,
-};
 
 export default fp(async (app) => {
   // AT Protocol discovery endpoints — required at fixed paths
@@ -59,16 +48,10 @@ export default fp(async (app) => {
       const { data: repo } = await agent.com.atproto.repo.describeRepo({
         repo: oauthSession.did,
       });
-      const { handle } = repo;
 
-      const session = await getIronSession<Session>(
-        request.raw,
-        reply.raw,
-        sessionOptions,
-      );
-      session.did = oauthSession.did;
-      session.handle = handle;
-      await session.save();
+      request.session.did = oauthSession.did;
+      request.session.handle = repo.handle;
+      await request.session.save();
 
       const frontendUrl = process.env.FRONTEND_URL ?? '/';
       return reply.redirect(frontendUrl);
@@ -83,37 +66,27 @@ export default fp(async (app) => {
 
   // Returns the current session status
   app.get('/auth/session', async (request, reply) => {
-    const session = await getIronSession<Session>(
-      request.raw,
-      reply.raw,
-      sessionOptions,
-    );
-
-    if (!session.did) {
+    if (!request.session.did) {
       return reply.status(401).send({ authenticated: false });
     }
-
-    return { authenticated: true, did: session.did, handle: session.handle };
+    return {
+      authenticated: true,
+      did: request.session.did,
+      handle: request.session.handle,
+    };
   });
 
   // Revokes the OAuth session and destroys the cookie
   app.post('/auth/logout', async (request, reply) => {
-    const session = await getIronSession<Session>(
-      request.raw,
-      reply.raw,
-      sessionOptions,
-    );
-
-    if (session.did) {
+    if (request.session.did) {
       try {
-        const oauthSession = await app.oauthClient.restore(session.did);
+        const oauthSession = await app.oauthClient.restore(request.session.did);
         if (oauthSession) await oauthSession.signOut();
       } catch (err) {
         app.log.warn({ err }, 'failed to revoke oauth session');
       }
     }
-
-    session.destroy();
+    request.session.destroy();
     return { success: true };
   });
 });
