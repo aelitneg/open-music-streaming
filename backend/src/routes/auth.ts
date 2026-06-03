@@ -1,6 +1,8 @@
 import fp from 'fastify-plugin';
 import { Agent } from '@atproto/api';
 import { isValidHandle } from '@atproto/syntax';
+import { sql } from 'drizzle-orm';
+import { users } from '../db/schema.js';
 
 export default fp(async (app) => {
   // AT Protocol discovery endpoints — required at fixed paths
@@ -48,6 +50,18 @@ export default fp(async (app) => {
       const { data: repo } = await agent.com.atproto.repo.describeRepo({
         repo: oauthSession.did,
       });
+
+      await app.db
+        .insert(users)
+        .values({ did: oauthSession.did, handle: repo.handle })
+        .onConflictDoUpdate({
+          target: users.did,
+          set: {
+            handle: sql`EXCLUDED.handle`,
+            updatedAt: sql`now()`,
+          },
+          setWhere: sql`${users.handle} != EXCLUDED.handle`,
+        });
 
       request.session.did = oauthSession.did;
       request.session.handle = repo.handle;
