@@ -10,6 +10,12 @@ import {
 } from '../lib/collections.js';
 import { isUniqueViolation } from '../lib/db.js';
 
+const PDS_URL = process.env.PDS_URL ?? 'http://localhost:3000';
+
+function buildAudioUrl(did: string, cid: string): string {
+  return `${PDS_URL}/xrpc/com.atproto.sync.getBlob?did=${did}&cid=${cid}`;
+}
+
 export default fp(async (app) => {
   app.get(
     '/artists/:artistRkey/albums/:albumRkey/songs',
@@ -27,7 +33,45 @@ export default fp(async (app) => {
         .from(songs)
         .where(eq(songs.albumUri, albumUri));
 
-      return { songs: rows };
+      return {
+        songs: rows.map((row) => ({
+          ...row,
+          audioUrl: buildAudioUrl(row.did, row.audioCid),
+        })),
+      };
+    },
+  );
+
+  app.get(
+    '/artists/:artistRkey/albums/:albumRkey/songs/:songRkey',
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const { albumRkey, songRkey } = request.params as {
+        artistRkey: string;
+        albumRkey: string;
+        songRkey: string;
+      };
+      const { did } = request.session;
+      const uri = `at://${did}/${SONG_COLLECTION}/${songRkey}`;
+      const albumUri = `at://${did}/${ALBUM_COLLECTION}/${albumRkey}`;
+
+      const [row] = await app.db
+        .select()
+        .from(songs)
+        .where(
+          and(
+            eq(songs.uri, uri),
+            eq(songs.albumUri, albumUri),
+            eq(songs.did, did),
+          ),
+        )
+        .limit(1);
+
+      if (!row) {
+        return reply.status(404).send({ error: 'song not found' });
+      }
+
+      return { ...row, audioUrl: buildAudioUrl(row.did, row.audioCid) };
     },
   );
 
@@ -150,6 +194,7 @@ export default fp(async (app) => {
         audioCid,
         audioMimeType,
         createdAt,
+        audioUrl: buildAudioUrl(did, audioCid),
       });
     },
   );
@@ -274,11 +319,14 @@ export default fp(async (app) => {
 
       await app.db.update(songs).set(updateSet).where(eq(songs.uri, uri));
 
+      const finalAudioCid = newAudioCid ?? existing.audioCid;
+
       return {
         ...existing,
         title: trimmedTitle ?? existing.title,
-        audioCid: newAudioCid ?? existing.audioCid,
+        audioCid: finalAudioCid,
         audioMimeType: newAudioMimeType ?? existing.audioMimeType,
+        audioUrl: buildAudioUrl(did, finalAudioCid),
       };
     },
   );
