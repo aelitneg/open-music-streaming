@@ -4,6 +4,7 @@ import { TID } from '@atproto/common-web';
 import { requireAuth } from '../plugins/session.js';
 import { artists } from '../db/schema.js';
 import { ARTIST_COLLECTION as COLLECTION } from '../lib/collections.js';
+import { isUniqueViolation } from '../lib/db.js';
 
 export default fp(async (app) => {
   app.get('/artists', { preHandler: requireAuth }, async (request) => {
@@ -15,16 +16,27 @@ export default fp(async (app) => {
   });
 
   app.post('/artists', { preHandler: requireAuth }, async (request, reply) => {
-    const { name } = request.body as { name?: unknown };
+    const { name } = (request.body as { name?: unknown }) ?? {};
 
     if (typeof name !== 'string' || name.trim().length === 0) {
       return reply.status(400).send({ error: 'name is required' });
     }
 
     const { did } = request.session;
+    const trimmedName = name.trim();
+
+    const [existing] = await app.db
+      .select()
+      .from(artists)
+      .where(and(eq(artists.did, did), eq(artists.name, trimmedName)))
+      .limit(1);
+
+    if (existing) {
+      return reply.status(409).send({ error: 'artist name already exists' });
+    }
+
     const rkey = TID.nextStr();
     const createdAt = new Date().toISOString();
-    const trimmedName = name.trim();
 
     // TODO: putRecord + DB write should be a single transaction with compensation on failure.
     const result = await request.agent.com.atproto.repo.putRecord({
@@ -37,9 +49,16 @@ export default fp(async (app) => {
 
     const uri = result.data.uri;
 
-    await app.db
-      .insert(artists)
-      .values({ uri, did, name: trimmedName, createdAt });
+    try {
+      await app.db
+        .insert(artists)
+        .values({ uri, did, name: trimmedName, createdAt });
+    } catch (err: unknown) {
+      if (isUniqueViolation(err)) {
+        return reply.status(409).send({ error: 'artist name already exists' });
+      }
+      throw err;
+    }
 
     return reply.status(201).send({ uri, did, name: trimmedName, createdAt });
   });
@@ -49,7 +68,7 @@ export default fp(async (app) => {
     { preHandler: requireAuth },
     async (request, reply) => {
       const { rkey } = request.params as { rkey: string };
-      const { name } = request.body as { name?: unknown };
+      const { name } = (request.body as { name?: unknown }) ?? {};
 
       if (typeof name !== 'string' || name.trim().length === 0) {
         return reply.status(400).send({ error: 'name is required' });
@@ -67,6 +86,16 @@ export default fp(async (app) => {
 
       if (!existing) {
         return reply.status(404).send({ error: 'artist not found' });
+      }
+
+      const [conflict] = await app.db
+        .select()
+        .from(artists)
+        .where(and(eq(artists.did, did), eq(artists.name, trimmedName)))
+        .limit(1);
+
+      if (conflict) {
+        return reply.status(409).send({ error: 'artist name already exists' });
       }
 
       // TODO: putRecord + DB write should be a single transaction with compensation on failure.

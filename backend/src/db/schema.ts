@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
 
 export const authSession = pgTable('auth_session', {
   key: text('key').primaryKey(),
@@ -22,26 +22,34 @@ export const users = pgTable('users', {
     .notNull(),
 });
 
-export const artists = pgTable('artists', {
-  uri: text('uri').primaryKey(),
-  did: text('did').notNull(),
-  name: text('name').notNull(),
-  createdAt: text('created_at').notNull(),
-  indexedAt: timestamp('indexed_at', { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const artists = pgTable(
+  'artists',
+  {
+    uri: text('uri').primaryKey(),
+    did: text('did').notNull(),
+    name: text('name').notNull(),
+    createdAt: text('created_at').notNull(),
+    indexedAt: timestamp('indexed_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [unique().on(t.did, t.name)],
+);
 
-export const albums = pgTable('albums', {
-  uri: text('uri').primaryKey(),
-  did: text('did').notNull(),
-  artistUri: text('artist_uri').notNull(),
-  title: text('title').notNull(),
-  createdAt: text('created_at').notNull(),
-  indexedAt: timestamp('indexed_at', { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const albums = pgTable(
+  'albums',
+  {
+    uri: text('uri').primaryKey(),
+    did: text('did').notNull(),
+    artistUri: text('artist_uri').notNull(),
+    title: text('title').notNull(),
+    createdAt: text('created_at').notNull(),
+    indexedAt: timestamp('indexed_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [unique().on(t.did, t.artistUri, t.title)],
+);
 
 export const songs = pgTable('songs', {
   uri: text('uri').primaryKey(),

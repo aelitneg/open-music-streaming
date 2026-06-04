@@ -1,0 +1,1 @@
+ALTER TABLE "artists" ADD CONSTRAINT "artists_did_name_unique" UNIQUE("did","name");

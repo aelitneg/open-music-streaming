@@ -28,7 +28,7 @@ export default fp(async (app) => {
     { preHandler: requireAuth },
     async (request, reply) => {
       const { artistRkey } = request.params as { artistRkey: string };
-      const { title } = request.body as { title?: unknown };
+      const { title } = (request.body as { title?: unknown }) ?? {};
 
       if (typeof title !== 'string' || title.trim().length === 0) {
         return reply.status(400).send({ error: 'title is required' });
@@ -46,6 +46,22 @@ export default fp(async (app) => {
 
       if (!artist) {
         return reply.status(404).send({ error: 'artist not found' });
+      }
+
+      const [existing] = await app.db
+        .select()
+        .from(albums)
+        .where(
+          and(
+            eq(albums.did, did),
+            eq(albums.artistUri, artistUri),
+            eq(albums.title, trimmedTitle),
+          ),
+        )
+        .limit(1);
+
+      if (existing) {
+        return reply.status(409).send({ error: 'album title already exists' });
       }
 
       const rkey = TID.nextStr();
@@ -86,7 +102,7 @@ export default fp(async (app) => {
         artistRkey: string;
         albumRkey: string;
       };
-      const { title } = request.body as { title?: unknown };
+      const { title } = (request.body as { title?: unknown }) ?? {};
 
       if (typeof title !== 'string' || title.trim().length === 0) {
         return reply.status(400).send({ error: 'title is required' });
@@ -105,6 +121,22 @@ export default fp(async (app) => {
 
       if (!existing) {
         return reply.status(404).send({ error: 'album not found' });
+      }
+
+      const [conflict] = await app.db
+        .select()
+        .from(albums)
+        .where(
+          and(
+            eq(albums.did, did),
+            eq(albums.artistUri, artistUri),
+            eq(albums.title, trimmedTitle),
+          ),
+        )
+        .limit(1);
+
+      if (conflict) {
+        return reply.status(409).send({ error: 'album title already exists' });
       }
 
       // TODO: putRecord + DB write should be a single transaction with compensation on failure.
