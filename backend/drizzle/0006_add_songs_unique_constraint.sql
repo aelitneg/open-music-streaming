@@ -1,0 +1,1 @@
+ALTER TABLE "songs" ADD CONSTRAINT "songs_did_artist_uri_album_uri_title_unique" UNIQUE("did","artist_uri","album_uri","title");

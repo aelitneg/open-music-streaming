@@ -51,16 +51,20 @@ export const albums = pgTable(
   (t) => [unique().on(t.did, t.artistUri, t.title)],
 );
 
-export const songs = pgTable('songs', {
-  uri: text('uri').primaryKey(),
-  did: text('did').notNull(),
-  artistUri: text('artist_uri').notNull(),
-  albumUri: text('album_uri').notNull(),
-  title: text('title').notNull(),
-  audioCid: text('audio_cid').notNull(),
-  audioMimeType: text('audio_mime_type').notNull(),
-  createdAt: text('created_at').notNull(),
-  indexedAt: timestamp('indexed_at', { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const songs = pgTable(
+  'songs',
+  {
+    uri: text('uri').primaryKey(),
+    did: text('did').notNull(),
+    artistUri: text('artist_uri').notNull(),
+    albumUri: text('album_uri').notNull(),
+    title: text('title').notNull(),
+    audioCid: text('audio_cid').notNull(),
+    audioMimeType: text('audio_mime_type').notNull(),
+    createdAt: text('created_at').notNull(),
+    indexedAt: timestamp('indexed_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [unique().on(t.did, t.artistUri, t.albumUri, t.title)],
+);

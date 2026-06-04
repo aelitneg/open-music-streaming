@@ -43,6 +43,13 @@
       "when": 1780605334443,
       "tag": "0005_albums_unique_did_artist_title",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1780606231349,
+      "tag": "0006_add_songs_unique_constraint",
+      "breakpoints": true
     }
   ]
 }

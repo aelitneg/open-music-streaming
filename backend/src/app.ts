@@ -7,6 +7,7 @@ import rootRoute from './routes/root.js';
 import authRoutes from './routes/auth.js';
 import artistRoutes from './routes/artists.js';
 import albumRoutes from './routes/albums.js';
+import songRoutes from './routes/songs.js';
 
 export function buildApp() {
   const app = Fastify({ logger: true });
@@ -19,6 +20,7 @@ export function buildApp() {
   app.register(authRoutes);
   app.register(artistRoutes);
   app.register(albumRoutes);
+  app.register(songRoutes);
 
   return app;
 }
