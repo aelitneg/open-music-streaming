@@ -1,0 +1,2 @@
+ALTER TABLE "albums" ADD CONSTRAINT "albums_artist_uri_artists_uri_fk" FOREIGN KEY ("artist_uri") REFERENCES "public"."artists"("uri") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "songs" ADD CONSTRAINT "songs_album_uri_albums_uri_fk" FOREIGN KEY ("album_uri") REFERENCES "public"."albums"("uri") ON DELETE cascade ON UPDATE no action;

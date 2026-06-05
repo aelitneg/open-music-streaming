@@ -199,6 +199,48 @@ export default fp(async (app) => {
     },
   );
 
+  app.delete(
+    '/artists/:artistRkey/albums/:albumRkey/songs/:songRkey',
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const { albumRkey, songRkey } = request.params as {
+        artistRkey: string;
+        albumRkey: string;
+        songRkey: string;
+      };
+
+      const { did } = request.session;
+      const uri = `at://${did}/${SONG_COLLECTION}/${songRkey}`;
+      const albumUri = `at://${did}/${ALBUM_COLLECTION}/${albumRkey}`;
+
+      const [existing] = await app.db
+        .select()
+        .from(songs)
+        .where(
+          and(
+            eq(songs.uri, uri),
+            eq(songs.albumUri, albumUri),
+            eq(songs.did, did),
+          ),
+        )
+        .limit(1);
+
+      if (!existing) {
+        return reply.status(404).send({ error: 'song not found' });
+      }
+
+      await request.agent.com.atproto.repo.deleteRecord({
+        repo: did,
+        collection: SONG_COLLECTION,
+        rkey: songRkey,
+      });
+
+      await app.db.delete(songs).where(eq(songs.uri, uri));
+
+      return reply.status(204).send();
+    },
+  );
+
   app.patch(
     '/artists/:artistRkey/albums/:albumRkey/songs/:songRkey',
     { preHandler: requireAuth },

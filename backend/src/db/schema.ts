@@ -41,7 +41,9 @@ export const albums = pgTable(
   {
     uri: text('uri').primaryKey(),
     did: text('did').notNull(),
-    artistUri: text('artist_uri').notNull(),
+    artistUri: text('artist_uri')
+      .notNull()
+      .references(() => artists.uri, { onDelete: 'cascade' }),
     title: text('title').notNull(),
     createdAt: text('created_at').notNull(),
     indexedAt: timestamp('indexed_at', { withTimezone: true })
@@ -57,7 +59,9 @@ export const songs = pgTable(
     uri: text('uri').primaryKey(),
     did: text('did').notNull(),
     artistUri: text('artist_uri').notNull(),
-    albumUri: text('album_uri').notNull(),
+    albumUri: text('album_uri')
+      .notNull()
+      .references(() => albums.uri, { onDelete: 'cascade' }),
     title: text('title').notNull(),
     audioCid: text('audio_cid').notNull(),
     audioMimeType: text('audio_mime_type').notNull(),

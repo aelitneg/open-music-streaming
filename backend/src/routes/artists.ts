@@ -2,8 +2,12 @@ import fp from 'fastify-plugin';
 import { and, eq } from 'drizzle-orm';
 import { TID } from '@atproto/common-web';
 import { requireAuth } from '../plugins/session.js';
-import { artists } from '../db/schema.js';
-import { ARTIST_COLLECTION as COLLECTION } from '../lib/collections.js';
+import { albums, artists, songs } from '../db/schema.js';
+import {
+  ARTIST_COLLECTION as COLLECTION,
+  ALBUM_COLLECTION,
+  SONG_COLLECTION,
+} from '../lib/collections.js';
 import { isUniqueViolation } from '../lib/db.js';
 
 export default fp(async (app) => {
@@ -62,6 +66,64 @@ export default fp(async (app) => {
 
     return reply.status(201).send({ uri, did, name: trimmedName, createdAt });
   });
+
+  app.delete(
+    '/artists/:rkey',
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const { rkey } = request.params as { rkey: string };
+      const { did } = request.session;
+      const uri = `at://${did}/${COLLECTION}/${rkey}`;
+
+      const [existing] = await app.db
+        .select()
+        .from(artists)
+        .where(and(eq(artists.uri, uri), eq(artists.did, did)))
+        .limit(1);
+
+      if (!existing) {
+        return reply.status(404).send({ error: 'artist not found' });
+      }
+
+      const artistAlbums = await app.db
+        .select()
+        .from(albums)
+        .where(eq(albums.artistUri, uri));
+
+      for (const album of artistAlbums) {
+        const albumSongs = await app.db
+          .select()
+          .from(songs)
+          .where(eq(songs.albumUri, album.uri));
+
+        for (const song of albumSongs) {
+          const songRkey = song.uri.split('/').pop()!;
+          await request.agent.com.atproto.repo.deleteRecord({
+            repo: did,
+            collection: SONG_COLLECTION,
+            rkey: songRkey,
+          });
+        }
+
+        const albumRkey = album.uri.split('/').pop()!;
+        await request.agent.com.atproto.repo.deleteRecord({
+          repo: did,
+          collection: ALBUM_COLLECTION,
+          rkey: albumRkey,
+        });
+      }
+
+      await request.agent.com.atproto.repo.deleteRecord({
+        repo: did,
+        collection: COLLECTION,
+        rkey,
+      });
+
+      await app.db.delete(artists).where(eq(artists.uri, uri));
+
+      return reply.status(204).send();
+    },
+  );
 
   app.patch(
     '/artists/:rkey',

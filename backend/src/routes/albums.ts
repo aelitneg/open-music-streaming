@@ -2,8 +2,12 @@ import fp from 'fastify-plugin';
 import { and, eq } from 'drizzle-orm';
 import { TID } from '@atproto/common-web';
 import { requireAuth } from '../plugins/session.js';
-import { albums, artists } from '../db/schema.js';
-import { ARTIST_COLLECTION, ALBUM_COLLECTION } from '../lib/collections.js';
+import { albums, artists, songs } from '../db/schema.js';
+import {
+  ARTIST_COLLECTION,
+  ALBUM_COLLECTION,
+  SONG_COLLECTION,
+} from '../lib/collections.js';
 
 export default fp(async (app) => {
   app.get(
@@ -91,6 +95,54 @@ export default fp(async (app) => {
       return reply
         .status(201)
         .send({ uri, did, artistUri, title: trimmedTitle, createdAt });
+    },
+  );
+
+  app.delete(
+    '/artists/:artistRkey/albums/:albumRkey',
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const { albumRkey } = request.params as {
+        artistRkey: string;
+        albumRkey: string;
+      };
+
+      const { did } = request.session;
+      const uri = `at://${did}/${ALBUM_COLLECTION}/${albumRkey}`;
+
+      const [existing] = await app.db
+        .select()
+        .from(albums)
+        .where(and(eq(albums.uri, uri), eq(albums.did, did)))
+        .limit(1);
+
+      if (!existing) {
+        return reply.status(404).send({ error: 'album not found' });
+      }
+
+      const albumSongs = await app.db
+        .select()
+        .from(songs)
+        .where(eq(songs.albumUri, uri));
+
+      for (const song of albumSongs) {
+        const songRkey = song.uri.split('/').pop()!;
+        await request.agent.com.atproto.repo.deleteRecord({
+          repo: did,
+          collection: SONG_COLLECTION,
+          rkey: songRkey,
+        });
+      }
+
+      await request.agent.com.atproto.repo.deleteRecord({
+        repo: did,
+        collection: ALBUM_COLLECTION,
+        rkey: albumRkey,
+      });
+
+      await app.db.delete(albums).where(eq(albums.uri, uri));
+
+      return reply.status(204).send();
     },
   );
 

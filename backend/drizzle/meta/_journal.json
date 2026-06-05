@@ -50,6 +50,13 @@
       "when": 1780606231349,
       "tag": "0006_add_songs_unique_constraint",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1780702262883,
+      "tag": "0007_add-cascade-deletes",
+      "breakpoints": true
     }
   ]
 }
