@@ -49,6 +49,7 @@ services:
       PDS_DID_PLC_URL: http://plc:3000
       PDS_ADMIN_PASSWORD: ${PDS_ADMIN_PASSWORD}
       PDS_BLOBSTORE_DISK_LOCATION: /pds/blocks
+      PDS_BLOB_UPLOAD_LIMIT: 52428800
       LOG_ENABLED: 'true'
       LOG_LEVEL: trace
       DEBUG_MODE: 1
